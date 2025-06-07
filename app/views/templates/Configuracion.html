@@ -114,7 +114,7 @@
         .warning {
             color: #ff5252;
             font-size: 0.95em;
-            margin-top: -0.5rem;
+            margin-top: 1.0rem;
             display: none;
             text-align: left;
         }
@@ -132,6 +132,22 @@
             warning.style.display = "none";
             return true;
         }
+
+        // Función para formatear la fecha
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toISOString().split('T')[0];
+        }
+
+        // Cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Formatear la fecha de nacimiento
+            const fechaNacimiento = document.querySelector('input[name="FechaNacimiento"]');
+            if (fechaNacimiento && fechaNacimiento.value) {
+                fechaNacimiento.value = formatDate(fechaNacimiento.value);
+            }
+        });
     </script>
 </head>
 <body>
@@ -143,37 +159,37 @@
         <!-- Nombre -->
         <div class="user-row">
             <span class="user-label">Nombre:</span>
-            <input type="text" name="Nombre" value="Juan" required>
+            <input type="text" name="Nombre" value="{{ usuario.Nombre }}" required>
         </div>
 
         <!-- Apellido Paterno -->
         <div class="user-row">
             <span class="user-label">Apellido Paterno:</span>
-            <input type="text" name="ApellidoPaterno" value="Pérez" required>
+            <input type="text" name="ApellidoPaterno" value="{{ usuario.ApellidoPaterno }}" required>
         </div>
 
         <!-- Apellido Materno -->
         <div class="user-row">
             <span class="user-label">Apellido Materno:</span>
-            <input type="text" name="ApellidoMaterno" value="Gómez">
+            <input type="text" name="ApellidoMaterno" value="{{ usuario.ApellidoMaterno }}">
         </div>
 
         <!-- Correo -->
         <div class="user-row">
             <span class="user-label">Correo:</span>
-            <input type="text" name="Correo" value="juan@example.com" required>
+            <input type="text" name="Correo" value="{{ usuario.Correo }}" required>
         </div>
 
         <!-- Fecha de Nacimiento -->
         <div class="user-row">
             <span class="user-label">Fecha Nacimiento:</span>
-            <input type="date" name="FechaNacimiento" value="1995-01-01" required>
+            <input type="date" name="FechaNacimiento" value="{{ usuario.FechaNacimiento.strftime('%Y-%m-%d') if usuario.FechaNacimiento else '' }}" required>
         </div>
 
         <!-- Usuario -->
         <div class="user-row">
             <span class="user-label">Usuario:</span>
-            <input type="text" name="Usuario" value="juanito95" required>
+            <input type="text" name="Usuario" value="{{ usuario.Usuario }}" required>
         </div>
 
         <!-- Contraseña -->

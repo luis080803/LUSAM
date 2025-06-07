@@ -72,10 +72,10 @@ class StreamRepository:
             {"_id": ObjectId(stream_id)}
         )
         return result.deleted_count > 0
-    
+        
     @staticmethod
-    def obtener_stream_activo_por_id(stream_id: str):
-        return db[StreamRepository.COLLECTION_NAME].find_one({
+    async def obtener_stream_activo_por_id(stream_id: str):
+        return await db[StreamRepository.COLLECTION_NAME].find_one({
             "_id": ObjectId(stream_id),
             "activo": True
         })

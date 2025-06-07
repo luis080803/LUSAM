@@ -3,6 +3,7 @@ from typing import Optional, List
 from app.models.usuario import UsuarioBase
 from app.config.database import db
 from bson import ObjectId
+from app.utils.password_utils import hash_password, verify_password
 
 
 class UsuarioRepository:
@@ -18,6 +19,9 @@ class UsuarioRepository:
             if isinstance(valor, date) and not isinstance(valor, datetime):
                 usuario_dict[campo] = datetime.combine(valor, datetime.min.time())
 
+        # Hashear la contraseña antes de guardar
+        usuario_dict['Password'] = hash_password(usuario_dict['Password'])
+
         result = await db[UsuarioRepository.COLLECTION_NAME].insert_one(usuario_dict)
         nuevo_usuario = await db[UsuarioRepository.COLLECTION_NAME].find_one(
             {"_id": result.inserted_id}
@@ -27,6 +31,10 @@ class UsuarioRepository:
 
     @staticmethod
     async def actualizar_usuario_por_nombre(nombre_usuario: str, datos_actualizados: dict) -> bool:
+        # Si se está actualizando la contraseña, hashearla
+        if 'Password' in datos_actualizados:
+            datos_actualizados['Password'] = hash_password(datos_actualizados['Password'])
+
         result = await db[UsuarioRepository.COLLECTION_NAME].update_one(
             {"Usuario": nombre_usuario},
             {"$set": datos_actualizados}
@@ -60,17 +68,19 @@ class UsuarioRepository:
     @staticmethod
     async def verificar_credenciales(nombre_usuario: str, contrasena: str) -> Optional[dict]:
         usuario = await db[UsuarioRepository.COLLECTION_NAME].find_one(
-            {"Usuario": nombre_usuario, "Password": contrasena}
+            {"Usuario": nombre_usuario}
         )
-        if usuario:
+        if usuario and verify_password(contrasena, usuario["Password"]):
             usuario["_id"] = str(usuario["_id"])
             return usuario
         return None
     
     @staticmethod
     async def cambiar_contrasena_plana(nombre_usuario: str, nueva_contrasena: str) -> bool:
+        # Hashear la nueva contraseña antes de guardar
+        hashed_password = hash_password(nueva_contrasena)
         result = await db[UsuarioRepository.COLLECTION_NAME].update_one(
             {"Usuario": nombre_usuario},
-            {"$set": {"Password": nueva_contrasena}}
+            {"$set": {"Password": hashed_password}}
         )
         return result.modified_count > 0

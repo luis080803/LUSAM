@@ -194,7 +194,7 @@
     <div class="recovery-container">
         <h1 class="recovery-title">RECUPERAR CUENTA</h1>
 
-        <div class="warning">
+        <div class="warning" id="userWarning" style="display: none;">
             Por favor, ingresa tu nombre de usuario para verificar tus preguntas de seguridad
         </div>
 
@@ -229,15 +229,21 @@
                 ¡Respuestas correctas! Redirigiendo a la página de cambio de contraseña...
             </div>
 
+            <div class="warning" id="answersWarning" style="display: none;">
+                Por favor, responde las preguntas de seguridad
+            </div>
+
             <button class="submit-button" onclick="verifyAnswers()">VERIFICAR RESPUESTAS</button>
         </div>
     </div>
     <script>
         async function verifyUser() {
             const username = document.getElementById('username').value;
+            const warningElement = document.getElementById('userWarning');
 
             if (!username) {
-                alert('Por favor, ingresa un nombre de usuario');
+                warningElement.textContent = 'Por favor, ingresa un nombre de usuario';
+                warningElement.style.display = 'block';
                 return;
             }
 
@@ -246,16 +252,19 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    warningElement.style.display = 'none';
                     document.getElementById('questions-section').style.display = 'block';
 
                     document.getElementById('question1').textContent = data.preguntas[0];
                     document.getElementById('question2').textContent = data.preguntas[1];
                 } else {
-                    alert(data.message || 'Usuario no encontrado');
+                    warningElement.textContent = data.message || 'Usuario no encontrado';
+                    warningElement.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Ocurrió un error al verificar el usuario');
+                warningElement.textContent = 'Ocurrió un error al verificar el usuario';
+                warningElement.style.display = 'block';
             }
         }
 
@@ -263,9 +272,11 @@
             const username = document.getElementById('username').value;
             const answer1 = document.getElementById('answer1').value;
             const answer2 = document.getElementById('answer2').value;
+            const warningElement = document.getElementById('answersWarning');
 
             if (!answer1 || !answer2) {
-                alert('Por favor, responde ambas preguntas');
+                warningElement.textContent = 'Por favor, responde ambas preguntas';
+                warningElement.style.display = 'block';
                 return;
             }
 
@@ -284,19 +295,20 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    warningElement.style.display = 'none';
                     document.getElementById('successMessage').style.display = 'block';
                     setTimeout(() => {
                         window.location.href = `/cambiocontrasena?usuario=${encodeURIComponent(username)}`;
                     }, 2000);
                 } else {
-                    alert(data.message || 'Respuestas incorrectas');
+                    warningElement.textContent = data.message || 'Respuestas incorrectas';
+                    warningElement.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Ocurrió un error al verificar las respuestas');
+                warningElement.textContent = 'Ocurrió un error al verificar las respuestas';
+                warningElement.style.display = 'block';
             }
-
-
         }
     </script>
 </body>
