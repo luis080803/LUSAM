@@ -26,10 +26,10 @@ async def login(
         # Configurar la cookie de autenticación
         response = RedirectResponse(url="/menu", status_code=302)
         
-        # Establecer cookie con el nombre de usuario (y otros datos si necesitas)
+        # Establecer cookie con el nombre de usuario
         response.set_cookie(
             key="current_user",
-            value=usuario["Usuario"],  # O usa usuario["_id"] para más seguridad
+            value=usuario["Usuario"],
             max_age=3600,  # 1 hora de duración
             httponly=True,  # Protección contra XSS
             secure=True,    # Solo enviar sobre HTTPS (en producción)
@@ -45,13 +45,8 @@ async def login(
         
         return response
     else:
-        # Mostrar mensaje de error en la plantilla
-        return templates.TemplateResponse(
-            "Login.html",
-            {
-                "request": request,
-                "title": "Inicio de Sesión",
-                "error": "Usuario o contraseña incorrectos",
-                "nombre_usuario": nombre_usuario  # Mantener el nombre ingresado
-            }
+        # Redirigir con parámetro de error
+        return RedirectResponse(
+            url="/login?error=invalid_credentials",
+            status_code=303
         )
