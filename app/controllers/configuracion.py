@@ -12,13 +12,41 @@ templates = Jinja2Templates(directory="app/views/templates")
 @router.get("/configuracion", response_class=HTMLResponse)
 async def mostrar_pagina_verstream(request: Request):
     """Configuracion"""
+    # Obtener el usuario actual desde la cookie
+    current_user = request.cookies.get("current_user")
+    if not current_user:
+        return RedirectResponse(url="/login")
+    
+    # Obtener datos completos del usuario
+    usuario = await UsuarioRepository.obtener_usuario_por_usuario(current_user)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    
     return templates.TemplateResponse(
         "Configuracion.html",
         {
             "request": request,
             "title": "Panel de Manejo",
-            "usuario": request.cookies.get("current_user")
+            "usuario": usuario
         }
+    )
+
+@router.get("/configuracion")
+async def mostrar_configuracion(request: Request):
+    # Obtener el usuario actual desde la cookie
+    current_user = request.cookies.get("current_user")
+    if not current_user:
+        return RedirectResponse(url="/login")
+    
+    # Obtener datos del usuario
+    usuario = await UsuarioRepository.obtener_usuario_por_usuario(current_user)
+    if not usuario:
+        return RedirectResponse(url="/login")
+    
+    # Renderizar la plantilla con los datos del usuario
+    return templates.TemplateResponse(
+        "Configuracion.html",
+        {"request": request, "usuario": usuario}
     )
 
 @router.post("/actualizar_perfil")

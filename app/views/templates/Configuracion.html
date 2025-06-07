@@ -143,37 +143,37 @@
         <!-- Nombre -->
         <div class="user-row">
             <span class="user-label">Nombre:</span>
-            <input type="text" name="Nombre" value="Juan" required>
+            <input type="text" name="Nombre" value="{{ usuario.Nombre }}" required>
         </div>
 
         <!-- Apellido Paterno -->
         <div class="user-row">
             <span class="user-label">Apellido Paterno:</span>
-            <input type="text" name="ApellidoPaterno" value="Pérez" required>
+            <input type="text" name="ApellidoPaterno" value="{{ usuario.ApellidoPaterno }}" required>
         </div>
 
         <!-- Apellido Materno -->
         <div class="user-row">
             <span class="user-label">Apellido Materno:</span>
-            <input type="text" name="ApellidoMaterno" value="Gómez">
+            <input type="text" name="ApellidoMaterno" value="{{ usuario.ApellidoMaterno }}">
         </div>
 
         <!-- Correo -->
         <div class="user-row">
             <span class="user-label">Correo:</span>
-            <input type="text" name="Correo" value="juan@example.com" required>
+            <input type="text" name="Correo" value="{{ usuario.Correo }}" required>
         </div>
 
         <!-- Fecha de Nacimiento -->
         <div class="user-row">
             <span class="user-label">Fecha Nacimiento:</span>
-            <input type="date" name="FechaNacimiento" value="1995-01-01" required>
+            <input type="date" name="FechaNacimiento" value="{{ usuario.FechaNacimiento }}" required>
         </div>
 
         <!-- Usuario -->
         <div class="user-row">
             <span class="user-label">Usuario:</span>
-            <input type="text" name="Usuario" value="juanito95" required>
+            <input type="text" name="Usuario" value="{{ usuario.Usuario }}" required>
         </div>
 
         <!-- Contraseña -->
