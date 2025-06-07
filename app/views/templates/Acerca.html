@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUSAM Self-Driving - Acerca de</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        nav {
+            background-color: rgba(30, 0, 40, 0.92);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #7b1fa2;
+            box-shadow: 0 2px 12px #7b1fa244;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #00eaff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7b1fa2;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-container {
+            background-color: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            padding: 2rem;
+            border-radius: 0;
+            box-shadow: 0 0 24px #7b1fa244;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .about-header h1 {
+            font-size: 2.5rem;
+            color: #7b1fa2;
+            text-shadow: 0 0 8px #00eaff88;
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: rgba(20, 20, 30, 0.9);
+            border: 1px solid #7b1fa2;
+        }
+
+        .section h2 {
+            color: #00eaff;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            text-shadow: 0 0 8px #00eaff44;
+        }
+
+        .section p {
+            color: #e1bfff;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .section ul {
+            color: #e1bfff;
+            padding-left: 1.5rem;
+        }
+
+        .section li {
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: rgba(30, 0, 40, 0.92);
+            border-top: 2px solid #7b1fa2;
+        }
+
+        .footer p {
+            color: #e1bfff;
+            margin: 0.5rem 0;
+        }
+
+        .footer .copyright {
+            color: #00eaff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="/menu">Volver al inicio</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="about-container">
+            <div class="about-header">
+                <h1>Acerca de LUSAM</h1>
+            </div>
+
+            <div class="section">
+                <h2>Descripción General del Proyecto</h2>
+                <p>LUSAM es una plataforma de streaming en tiempo real enfocada en la transmisión de video proveniente
+                    de bots inteligentes autónomos o manejados manualmente. Estos bots están equipados con cámaras y
+                    capacidades de procesamiento de imágenes, permitiendo la visualización en directo, captura de
+                    imágenes y detección automática de objetos (como personas, animales o dispositivos móviles). Además,
+                    la plataforma contará con una galería comunitaria y un sistema de almacenamiento en la nube.</p>
+            </div>
+
+            <div class="section">
+                <h2>Objetivos del Proyecto</h2>
+                <ul>
+                    <li>Permitir la transmisión en vivo desde un Smart Bot controlado remotamente.</li>
+                    <li>Habilitar el control manual y automático del bot.</li>
+                    <li>Procesar video en tiempo real para realizar detección de objetos usando modelos de aprendizaje
+                        automático implementados en Python.</li>
+                    <li>Implementar funcionalidades para capturar imágenes y almacenarlas en una galería comunitaria.
+                    </li>
+                    <li>Registrar información relacionada con los usuarios, sesiones de transmisión, y accesos, en una
+                        base de datos en la nube.</li>
+                    <li>Asegurar la seguridad de los datos mediante almacenamiento cifrado de contraseñas y control de
+                        roles de acceso.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Alcance del Proyecto</h2>
+                <ul>
+                    <li>Versión mínima funcional basada en un solo Smart Bot.</li>
+                    <li>Acceso mediante autenticación de usuarios.</li>
+                    <li>Roles diferenciados (e.g. administrador, usuario común, moderador, streamer en caso de estar
+                        actuando como tal).</li>
+                    <li>Interfaz de visualización del stream.</li>
+                    <li>Funcionalidad de captura de imágenes durante el streaming.</li>
+                    <li>Detección en tiempo real de objetos mediante modelos de visión por computador (YOLO)</li>
+                    <li>Backend implementado en Python utilizando:
+                        <ul>
+                            <li>OpenCV para manejo de video.</li>
+                            <li>Pymongo para conexión y almacenamiento con MongoDB Atlas.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer">
+                <p>Desarrollado por:</p>
+                <p>Luis Fernando Bravo Ibañez</p>
+                <p>Samuel Obed García Velandia</p>
+                <p class="copyright">© 2025</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

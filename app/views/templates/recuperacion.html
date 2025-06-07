@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Cuenta - LUSAM Self-Driving</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                url('driveless_car.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        nav {
+            background-color: rgba(30, 0, 40, 0.92);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #7b1fa2;
+            box-shadow: 0 2px 12px #7b1fa244;
+        }
+
+        .nav-links a {
+            color: #00eaff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7b1fa2;
+        }
+
+        .recovery-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 24px #7b1fa244;
+        }
+
+        .recovery-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: 2px;
+            color: #7b1fa2;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+
+        .user-container {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #7b1fa2;
+            background-color: rgba(10, 10, 20, 0.5);
+        }
+
+        .user-container h2 {
+            color: #00eaff;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .user-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background-color: rgba(10, 10, 20, 0.8);
+            border: 1px solid #7b1fa2;
+            color: #e1bfff;
+            font-size: 1rem;
+        }
+
+        .user-input:focus {
+            outline: none;
+            border-color: #00eaff;
+            box-shadow: 0 0 8px #00eaff44;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #7b1fa2;
+            background-color: rgba(10, 10, 20, 0.5);
+        }
+
+        .question-container h2 {
+            color: #00eaff;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: rgba(123, 31, 162, 0.1);
+            border-left: 4px solid #7b1fa2;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background-color: rgba(10, 10, 20, 0.8);
+            border: 1px solid #7b1fa2;
+            color: #e1bfff;
+            font-size: 1rem;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #00eaff;
+            box-shadow: 0 0 8px #00eaff44;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background-color: #7b1fa2;
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .submit-button:hover {
+            background-color: #00eaff;
+            transform: translateY(-2px);
+        }
+
+        .verify-button {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #7b1fa2;
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .verify-button:hover {
+            background-color: #00eaff;
+            transform: translateY(-2px);
+        }
+
+        .warning {
+            color: #ff6b6b;
+            font-weight: bold;
+            padding: 1rem;
+            border: 1px solid #ff6b6b;
+            margin: 1rem 0;
+            background-color: rgba(255, 107, 107, 0.1);
+        }
+
+        .success-message {
+            color: #00eaff;
+            font-weight: bold;
+            padding: 1rem;
+            border: 1px solid #00eaff;
+            margin: 1rem 0;
+            background-color: rgba(0, 234, 255, 0.1);
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="/login"> Volver</a>
+        </div>
+    </nav>
+
+    <div class="recovery-container">
+        <h1 class="recovery-title">RECUPERAR CUENTA</h1>
+
+        <div class="warning">
+            Por favor, ingresa tu nombre de usuario para verificar tus preguntas de seguridad
+        </div>
+
+        <div class="user-container">
+            <h2>Usuario</h2>
+            <input type="text" class="user-input" id="username" placeholder="Ingresa tu nombre de usuario">
+            <button class="verify-button" onclick="verifyUser()">VERIFICAR USUARIO</button>
+        </div>
+
+        <div id="questions-section" style="display: none;">
+            <div class="warning">
+                Por favor, responde las siguientes preguntas de seguridad para recuperar tu cuenta
+            </div>
+
+            <div class="question-container">
+                <h2>Pregunta 1</h2>
+                <div class="question-text" id="question1">
+                    ¿Cuántas mascotas hay en tu casa?
+                </div>
+                <input type="text" class="answer-input" id="answer1" placeholder="Tu respuesta">
+            </div>
+
+            <div class="question-container">
+                <h2>Pregunta 2</h2>
+                <div class="question-text" id="question2">
+                    ¿Cuál es tu color favorito?
+                </div>
+                <input type="text" class="answer-input" id="answer2" placeholder="Tu respuesta">
+            </div>
+
+            <div class="success-message" id="successMessage">
+                ¡Respuestas correctas! Redirigiendo a la página de cambio de contraseña...
+            </div>
+
+            <button class="submit-button" onclick="verifyAnswers()">VERIFICAR RESPUESTAS</button>
+        </div>
+    </div>
+    <script>
+        async function verifyUser() {
+            const username = document.getElementById('username').value;
+
+            if (!username) {
+                alert('Por favor, ingresa un nombre de usuario');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/preguntas/${username}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('questions-section').style.display = 'block';
+
+                    document.getElementById('question1').textContent = data.preguntas[0];
+                    document.getElementById('question2').textContent = data.preguntas[1];
+                } else {
+                    alert(data.message || 'Usuario no encontrado');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Ocurrió un error al verificar el usuario');
+            }
+        }
+
+        async function verifyAnswers() {
+            const username = document.getElementById('username').value;
+            const answer1 = document.getElementById('answer1').value;
+            const answer2 = document.getElementById('answer2').value;
+
+            if (!answer1 || !answer2) {
+                alert('Por favor, responde ambas preguntas');
+                return;
+            }
+
+            try {
+                const response = await fetch('/verificar_respuestas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        usuario: username,
+                        respuestas: [answer1, answer2]
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = `/cambiocontrasena?usuario=${encodeURIComponent(username)}`;
+                    }, 2000);
+                } else {
+                    alert(data.message || 'Respuestas incorrectas');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Ocurrió un error al verificar las respuestas');
+            }
+
+
+        }
+    </script>
+</body>
+
+</html>

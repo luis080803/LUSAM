@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperación de Cuenta - LUSAM Self-Driving</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                        url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        nav {
+            background-color: rgba(30, 0, 40, 0.92);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #7b1fa2;
+            box-shadow: 0 2px 12px #7b1fa244;
+        }
+
+        .nav-links a {
+            color: #00eaff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7b1fa2;
+        }
+
+        .recovery-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 24px #7b1fa244;
+        }
+
+        .recovery-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: 2px;
+            color: #7b1fa2;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+
+        .step-container {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #7b1fa2;
+            background-color: rgba(10, 10, 20, 0.5);
+        }
+
+        .step-container h2 {
+            color: #00eaff;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .question-select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background-color: rgba(10, 10, 20, 0.8);
+            border: 1px solid #7b1fa2;
+            color: #e1bfff;
+            font-size: 1rem;
+        }
+
+        .question-select option {
+            background-color: #101018;
+            color: #e1bfff;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background-color: rgba(10, 10, 20, 0.8);
+            border: 1px solid #7b1fa2;
+            color: #e1bfff;
+            font-size: 1rem;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #00eaff;
+            box-shadow: 0 0 8px #00eaff44;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background-color: #7b1fa2;
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .submit-button:hover {
+            background-color: #00eaff;
+            transform: translateY(-2px);
+        }
+
+        .warning {
+            color: #ff6b6b;
+            font-weight: bold;
+            padding: 1rem;
+            border: 1px solid #ff6b6b;
+            margin: 1rem 0;
+            background-color: rgba(255, 107, 107, 0.1);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(123, 31, 162, 0.3);
+            border: 2px solid #7b1fa2;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e1bfff;
+            font-weight: bold;
+        }
+
+        .step.active {
+            background-color: #7b1fa2;
+            border-color: #00eaff;
+        }
+
+        .step.completed {
+            background-color: #00eaff;
+            border-color: #00eaff;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="stream.html">← Volver al Control</a>
+        </div>
+    </nav>
+
+    <div class="recovery-container">
+        <h1 class="recovery-title">RECUPERACIÓN DE CUENTA</h1>
+
+        <div class="step-indicator">
+            <div class="step active" id="step1">1</div>
+            <div class="step" id="step2">2</div>
+        </div>
+
+        <div id="step1-container" class="step-container">
+            <h2>Pregunta 1</h2>
+            <select class="question-select" id="question1">
+                <option value="">Selecciona una pregunta</option>
+                <option value="mascotas">¿Cuántas mascotas hay en tu casa?</option>
+                <option value="color">¿Cuál es tu color favorito?</option>
+                <option value="padre">¿El nombre de tu papá es..?</option>
+                <option value="pasatiempo">¿Cuál es tu pasatiempo favorito?</option>
+                <option value="instrumento">¿Qué instrumento tocas?</option>
+                <option value="cantante">¿Cuál es tu cantante favorito?</option>
+            </select>
+            <input type="text" class="answer-input" id="answer1" placeholder="Tu respuesta">
+        </div>
+
+        <div id="step2-container" class="step-container" style="display: none;">
+            <h2>Pregunta 2</h2>
+            <select class="question-select" id="question2">
+                <!-- Se llenará dinámicamente -->
+            </select>
+            <input type="text" class="answer-input" id="answer2" placeholder="Tu respuesta">
+        </div>
+
+        <button class="submit-button" onclick="nextStep()">CONTINUAR</button>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        const allQuestions = [
+            { value: "", text: "Selecciona una pregunta" },
+            { value: "mascotas", text: "¿Cuántas mascotas hay en tu casa?" },
+            { value: "color", text: "¿Cuál es tu color favorito?" },
+            { value: "padre", text: "¿El nombre de tu papá es..?" },
+            { value: "pasatiempo", text: "¿Cuál es tu pasatiempo favorito?" },
+            { value: "instrumento", text: "¿Qué instrumento tocas?" },
+            { value: "cantante", text: "¿Cuál es tu cantante favorito?" }
+        ];
+
+        function populateQuestion2Options(excludeValue) {
+            const question2 = document.getElementById('question2');
+            question2.innerHTML = '';
+
+            allQuestions.forEach(q => {
+                if (q.value !== excludeValue) {
+                    const option = document.createElement('option');
+                    option.value = q.value;
+                    option.textContent = q.text;
+                    question2.appendChild(option);
+                }
+            });
+        }
+
+      
+      function nextStep() {
+    if (currentStep === 1) {
+        const question1 = document.getElementById('question1').value;
+        const answer1 = document.getElementById('answer1').value;
+
+        if (!question1 || !answer1) {
+            alert('Por favor, selecciona una pregunta y proporciona una respuesta');
+            return;
+        }
+
+        // Mostrar la siguiente sección
+        document.getElementById('step1-container').style.display = 'none';
+        document.getElementById('step2-container').style.display = 'block';
+        document.getElementById('step1').classList.add('completed');
+        document.getElementById('step2').classList.add('active');
+        document.querySelector('.submit-button').textContent = 'GUARDAR PREGUNTAS';
+
+        // Llenar dinámicamente el segundo <select> sin la opción seleccionada en el primero
+        populateQuestion2Options(question1);
+
+        currentStep = 2;
+    } else {
+        const question1 = document.getElementById('question1').value;
+        const answer1 = document.getElementById('answer1').value;
+        const question2 = document.getElementById('question2').value;
+        const answer2 = document.getElementById('answer2').value;
+
+        if (!question2 || !answer2) {
+            alert('Por favor, selecciona una pregunta y proporciona una respuesta');
+            return;
+        }
+
+        // Obtener el usuario desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const usuario = urlParams.get("usuario");
+
+        if (!usuario) {
+            alert("Usuario no definido en la URL");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("pregunta1", question1);
+        formData.append("respuesta1", answer1);
+        formData.append("pregunta2", question2);
+        formData.append("respuesta2", answer2);
+        formData.append("usuario", usuario);
+
+        fetch('/guardar-preguntas-seguridad', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                alert('Error al guardar las preguntas de seguridad');
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+            alert('Error de red al guardar las preguntas de seguridad');
+        });
+    }
+}
+
+
+    </script>
+</body>
+</html>

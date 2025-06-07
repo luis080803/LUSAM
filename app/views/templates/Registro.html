@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LUSAM SELF-DRIVING - Registro</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(123, 31, 162, 0.4) 100%);
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 60px;
+            color: #fff;
+            text-align: left;
+        }
+
+        .left-panel h1 {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 0 0 20px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 234, 255, 0.5);
+            background: linear-gradient(90deg, #fff 0%, #00eaff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+            }
+
+            to {
+                text-shadow: 0 0 20px rgba(0, 234, 255, 0.8),
+                    0 0 30px rgba(123, 31, 162, 0.6);
+            }
+        }
+
+        .left-panel .devs {
+            margin-top: 40px;
+            font-size: 1.1em;
+            color: #e0e0e0;
+            text-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .login-box {
+            background: rgba(10, 10, 20, 0.85);
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(123, 31, 162, 0.4),
+                0 0 0 1px rgba(0, 234, 255, 0.1);
+            min-width: 320px;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            margin-right: 8vw;
+        }
+
+        .login-box h2 {
+            color: #7b1fa2;
+            margin-bottom: 16px;
+            font-size: 2em;
+            letter-spacing: 2px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(0, 234, 255, 0.5);
+            background: linear-gradient(90deg, #7b1fa2 0%, #00eaff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .form-row .half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-box label {
+            color: #00eaff;
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: block;
+            letter-spacing: 1px;
+            text-align: left;
+            text-shadow: 0 0 8px rgba(123, 31, 162, 0.5);
+            font-size: 0.85em;
+        }
+
+        .login-box input[type="text"],
+        .login-box input[type="password"],
+        .login-box input[type="email"],
+        .login-box input[type="date"] {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+            border: 2px solid rgba(123, 31, 162, 0.5);
+            background: rgba(24, 24, 40, 0.8);
+            color: #fff;
+            font-size: 0.9em;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .login-box input[type="text"]:focus,
+        .login-box input[type="password"]:focus,
+        .login-box input[type="email"]:focus,
+        .login-box input[type="date"]:focus {
+            border-color: #00eaff;
+            box-shadow: 0 0 15px rgba(0, 234, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .login-box input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #7b1fa2 0%, #00eaff 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            letter-spacing: 2px;
+            font-size: 1em;
+            border-radius: 6px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0, 234, 255, 0.3);
+        }
+
+        .login-box input[type="submit"]:hover {
+            background: linear-gradient(45deg, #00eaff 0%, #7b1fa2 100%);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 234, 255, 0.5);
+        }
+
+        .login-links {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .login-links a {
+            color: #00eaff;
+            text-decoration: none;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 8px rgba(123, 31, 162, 0.5);
+        }
+
+        .login-links a:hover {
+            color: #7b1fa2;
+            text-shadow: 0 0 12px rgba(0, 234, 255, 0.8);
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .left-panel,
+            .right-panel {
+                flex: unset;
+                width: 100%;
+                padding: 30px 0;
+                align-items: center;
+                text-align: center;
+            }
+
+            .left-panel {
+                padding-left: 0;
+            }
+
+            .login-box {
+                margin-right: 0;
+                width: 85%;
+                max-width: 320px;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="left-panel">
+            <h1>LUSAM<br>SELF-DRIVING</h1>
+            <div class="devs">
+                Desarrollado por:<br>
+                García Velandia Samuel Obed<br>
+                Bravo Ibañez Luis Fernando
+            </div>
+        </div>
+        <div class="right-panel">
+            <form class="login-box" action="/registro" method="POST" id="registerForm" autocomplete="off">
+                <h2>REGISTRO</h2>
+
+                <div class="form-row">
+                    <div class="half">
+                        <label for="nombre">NOMBRE</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="half">
+                        <label for="apellido_paterno">APELLIDO PATERNO</label>
+                        <input type="text" id="apellido_paterno" name="apellido_paterno" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="half">
+                        <label for="apellido_materno">APELLIDO MATERNO</label>
+                        <input type="text" id="apellido_materno" name="apellido_materno">
+                    </div>
+                    <div class="half">
+                        <label for="fecha_nacimiento" style="font-size: 0.75em;">FECHA DE NACIMIENTO</label>
+                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                    </div>
+                </div>
+
+                <label for="correo">CORREO ELECTRÓNICO</label>
+                <input type="email" id="correo" name="correo" required>
+                <div id="correo-warning"
+                    style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none; text-align:left; width:100%">
+                    Ingresa un correo electrónico válido.</div>
+
+                <div class="form-row">
+                    <div class="half">
+                        <label for="usuario">USUARIO</label>
+                        <input type="text" id="usuario" name="usuario" required>
+                    </div>
+                    <div class="half">
+                        <label for="password">CONTRASEÑA</label>
+                        <input type="password" id="password" name="password" required minlength="8"
+                            oninput="validatePassword()">
+                    </div>
+                </div>
+                <div id="password-warning"
+                    style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none; text-align:left; width:100%">
+                    La contraseña debe tener al menos 8 caracteres.
+                </div>
+
+                <label for="confirmar_password">CONFIRMAR CONTRASEÑA</label>
+                <input type="password" id="confirmar_password" name="confirmar_password" required
+                    oninput="validatePassword()">
+                <div id="confirm-warning"
+                    style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none; text-align:left; width:100%">
+                    Las contraseñas no coinciden.
+                </div>
+
+                <script>
+                    function validatePassword() {
+                        const password = document.getElementById('password');
+                        const confirmPassword = document.getElementById('confirmar_password');
+                        const passwordWarning = document.getElementById('password-warning');
+                        const confirmWarning = document.getElementById('confirm-warning');
+
+                        // Validar longitud mínima
+                        if (password.value.length > 0 && password.value.length < 8) {
+                            passwordWarning.style.display = 'block';
+                        } else {
+                            passwordWarning.style.display = 'none';
+                        }
+
+                        // Validar coincidencia
+                        if (confirmPassword.value.length > 0 && password.value !== confirmPassword.value) {
+                            confirmWarning.style.display = 'block';
+                        } else {
+                            confirmWarning.style.display = 'none';
+                        }
+
+                        // Deshabilitar submit si no cumple requisitos
+                        document.querySelector('form').querySelector('input[type="submit"]').disabled =
+                            (password.value.length < 8 || password.value !== confirmPassword.value);
+                    }
+
+                    // Validar al cargar (por si hay valores precargados)
+                    document.addEventListener('DOMContentLoaded', validatePassword);
+                </script>
+
+                <input type="submit" value="REGISTRARSE">
+                <div class="login-links">
+                    <a href="/login">¿Ya tienes cuenta? ¡Inicia sesión!</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

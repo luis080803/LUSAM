@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LUSAM SELF-DRIVING - Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 60px;
+            color: #fff;
+            text-align: left;
+        }
+
+        .left-panel h1 {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0 0 20px 0;
+            letter-spacing: 2px;
+        }
+
+        .left-panel .devs {
+            margin-top: 40px;
+            font-size: 0.95em;
+            color: #e0e0e0;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .login-box {
+            background: rgba(10, 10, 20, 0.82);
+            padding: 48px 44px 44px 44px;
+            border-radius: 0;
+            box-shadow: 0 8px 40px #7b1fa2cc;
+            min-width: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid #7b1fa2;
+            margin-right: 8vw;
+        }
+
+        .login-box h2 {
+            color: #7b1fa2;
+            margin-bottom: 24px;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+            text-align: center;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+
+        .login-box label {
+            color: #00eaff;
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: block;
+            letter-spacing: 1px;
+            width: 100%;
+            text-align: left;
+            text-shadow: 0 0 4px #7b1fa288;
+        }
+
+        .login-box input[type="text"],
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            border: 1.5px solid #7b1fa2;
+            background: #181828;
+            color: #fff;
+            font-size: 1em;
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .login-box input[type="text"]:focus,
+        .login-box input[type="password"]:focus {
+            border: 1.5px solid #00eaff;
+        }
+
+        .login-box input[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            margin-top: 8px;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+            box-shadow: 0 0 8px #00eaff55;
+        }
+
+        .login-box input[type="submit"]:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .login-links {
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .login-links a {
+            color: #00eaff;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            margin: 8px 0;
+            transition: color 0.2s;
+        }
+
+        .login-links a:hover {
+            color: #7b1fa2;
+            text-shadow: 0 0 4px #00eaff88;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .left-panel,
+            .right-panel {
+                flex: unset;
+                width: 100%;
+                padding: 30px 0;
+                align-items: center;
+                text-align: center;
+            }
+
+            .left-panel {
+                padding-left: 0;
+                text-align: center;
+            }
+
+            .right-panel {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="left-panel">
+            <h1>LUSAM<br>SELF-DRIVING</h1>
+            <div class="devs">
+                Desarrollado por:<br>
+                García Velandia Samuel Obed<br>
+                Bravo Ibañez Luis Fernando
+            </div>
+        </div>
+        <div class="right-panel">
+            <form class="login-box" action="/login" method="POST">
+                <h2>LOG IN</h2>
+                <label for="usuario">USUARIO</label>
+                <input type="text" id="username" name="nombre_usuario" required>
+                <label for="contrasena">CONTRASEÑA</label>
+                <input type="password" id="password" name="contrasena" required>
+                <input type="submit" value="LOG IN">
+                <div class="login-links">
+                    <a href="/registro">¿No tienes cuenta? ¡Regístrate!</a>
+                    <a href="/recuperacion">¿Olvidaste tu contraseña?</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>

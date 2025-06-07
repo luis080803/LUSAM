@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Capturas - LUSAM Self-Driving</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                         url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            max-width: 900px;
+            margin: 60px auto 0 auto;
+            background: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 24px #7b1fa244;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 0;
+            text-align: center;
+        }
+        h1 {
+            color: #7b1fa2;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+        p {
+            color: #e1bfff;
+            margin-bottom: 2rem;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .gallery-item {
+            background: rgba(16, 16, 32, 0.9);
+            padding: 0.8rem;
+            border-radius: 6px;
+            box-shadow: 0 0 12px #7b1fa222;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .gallery img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border: 2px solid #00eaff;
+            background: #22223a;
+            box-shadow: 0 0 8px #00eaff44;
+        }
+        .image-info {
+            margin-top: 0.8rem;
+            text-align: center;
+        }
+        .image-info p {
+            margin: 0.3rem 0;
+            color: #cdbdff;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .image-info .delete-btn {
+            margin-top: 0.6rem;
+            display: inline-block;
+            background: #ff4081;
+            color: white;
+            padding: 0.4rem 1rem;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: background 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 0 6px #ff408188;
+        }
+        .image-info .delete-btn:hover {
+            background: #e91e63;
+            transform: translateY(-2px) scale(1.05);
+        }
+        .btn-menu {
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+            box-shadow: 0 0 8px #00eaff55;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-menu:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+            color: #181828;
+            transform: translateY(-2px) scale(1.03);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Galería de Capturas</h1>
+        <p>Visualiza y gestiona las capturas de tus vehículos autónomos.</p>
+        
+        <!-- Galería de imágenes -->
+        <div class="gallery">
+            {% if imagenes %}
+                {% for imagen in imagenes %}
+                <div class="gallery-item">
+                    <img src="{{ imagen.Ruta }}" alt="{{ imagen.Etiqueta }}">
+                    <div class="image-info">
+                        <p>{{ imagen.Etiqueta }}</p>
+                        <p>{{ imagen.Fecha.strftime('%Y-%m-%d') }}</p>
+                        <a class="delete-btn" href="/delete-image/{{ imagen._id }}" onclick="return confirm('¿Estás seguro de eliminar esta imagen?')">Eliminar</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No hay imágenes en la galería.</p>
+            {% endif %}
+        </div>
+        
+        <button class="btn-menu" onclick="window.location.href='/menu'">Regresar al Menú</button>
+    </div>
+</body>
+</html>

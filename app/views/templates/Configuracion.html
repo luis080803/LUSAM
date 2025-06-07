@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración de Cuenta - LUSAM Self-Driving</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                         url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            max-width: 500px;
+            margin: 60px auto 0 auto;
+            background: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 24px #7b1fa244;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 0;
+            text-align: center;
+        }
+        h1 {
+            color: #7b1fa2;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+        p {
+            color: #e1bfff;
+            margin-bottom: 2rem;
+        }
+        .user-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #22223a;
+            border: 2px solid #00eaff;
+            border-radius: 0;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .user-label {
+            color: #00eaff;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .user-row input {
+            color: #e1bfff;
+            font-size: 1.1em;
+            margin-left: 1rem;
+            flex: 1;
+        }
+        .save-btn, .btn-menu {
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 1em;
+            box-shadow: 0 0 8px #00eaff55;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .save-btn:hover, .btn-menu:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+            color: #181828;
+            transform: translateY(-2px) scale(1.03);
+        }
+        .pass-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+        label {
+            color: #00eaff;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+            text-align: left;
+            display: block;
+        }
+        input[type="text"], input[type="password"], input[type="date"] {
+            padding: 0.7rem;
+            border: 2px solid #7b1fa2;
+            background: #22223a;
+            color: #e1bfff;
+            font-size: 1rem;
+            border-radius: 0;
+            outline: none;
+            transition: border 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #00eaff;
+        }
+        .btns {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .warning {
+            color: #ff5252;
+            font-size: 0.95em;
+            margin-top: -0.5rem;
+            display: none;
+            text-align: left;
+        }
+    </style>
+    <script>
+        function checkConfirm() {
+            const pass = document.getElementById("password").value;
+            const confirm = document.getElementById("confirmar_password").value;
+            const warning = document.getElementById("confirm-warning");
+
+            if (pass !== confirm) {
+                warning.style.display = "block";
+                return false;
+            }
+            warning.style.display = "none";
+            return true;
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Configuración de Cuenta</h1>
+    <p>Edita tu información personal o cambia tu contraseña.</p>
+
+    <form method="POST" action="/actualizar_perfil" id="perfilForm" onsubmit="return checkConfirm()">
+        <!-- Nombre -->
+        <div class="user-row">
+            <span class="user-label">Nombre:</span>
+            <input type="text" name="Nombre" value="Juan" required>
+        </div>
+
+        <!-- Apellido Paterno -->
+        <div class="user-row">
+            <span class="user-label">Apellido Paterno:</span>
+            <input type="text" name="ApellidoPaterno" value="Pérez" required>
+        </div>
+
+        <!-- Apellido Materno -->
+        <div class="user-row">
+            <span class="user-label">Apellido Materno:</span>
+            <input type="text" name="ApellidoMaterno" value="Gómez">
+        </div>
+
+        <!-- Correo -->
+        <div class="user-row">
+            <span class="user-label">Correo:</span>
+            <input type="text" name="Correo" value="juan@example.com" required>
+        </div>
+
+        <!-- Fecha de Nacimiento -->
+        <div class="user-row">
+            <span class="user-label">Fecha Nacimiento:</span>
+            <input type="date" name="FechaNacimiento" value="1995-01-01" required>
+        </div>
+
+        <!-- Usuario -->
+        <div class="user-row">
+            <span class="user-label">Usuario:</span>
+            <input type="text" name="Usuario" value="juanito95" required>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="pass-fields">
+            <div>
+                <label for="password">Nueva contraseña</label>
+                <input type="password" id="password" name="password" minlength="8">
+            </div>
+            <div>
+                <label for="confirmar_password">Confirmar nueva contraseña</label>
+                <input type="password" id="confirmar_password" name="confirmar_password" minlength="8">
+                <div id="confirm-warning" class="warning">Las contraseñas no coinciden.</div>
+            </div>
+        </div>
+
+        <!-- Botón guardar -->
+        <div class="btns">
+            <button class="save-btn" type="submit">Guardar Cambios</button>
+        </div>
+    </form>
+
+    <div class="btns">
+        <button class="btn-menu" onclick="window.location.href='/menu';return false;">Regresar al Menú</button>
+    </div>
+</div>
+</body>
+</html>

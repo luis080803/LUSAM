@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - LUSAM Self-Driving</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 60px auto 0 auto;
+            background: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 24px #7b1fa244;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #7b1fa2;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+
+        p {
+            color: #e1bfff;
+            margin-bottom: 2rem;
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #22223a;
+            border: 2px solid #00eaff;
+            border-radius: 0;
+            padding: 1.5rem 1rem;
+            width: 220px;
+            box-shadow: 0 0 8px #00eaff44;
+            text-align: center;
+        }
+
+        .stat-card h2 {
+            color: #00eaff;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card img {
+            width: 100%;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-menu {
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+            box-shadow: 0 0 8px #00eaff55;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-menu:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+            color: #181828;
+            transform: translateY(-2px) scale(1.03);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Estadísticas</h1>
+        <p>Visualiza el rendimiento y métricas de tus vehículos autónomos.</p>
+        <div class="stats">
+            <div class="stat-card">
+                <h2>Obstáculos Detectados</h2>
+                <img src="/static/obstaculos.png" alt="Obstáculos">
+                <div>{{ obstaculos }}</div>
+            </div>
+            <div class="stat-card">
+                <h2>Fotos Tomadas</h2>
+                <img src="/static/imagen.png" alt="Imagen">
+                <div>{{ fotos }}</div>
+            </div>
+        </div>
+        <button class="btn-menu" onclick="window.location.href='/menu'">Regresar al Menú</button>
+    </div>
+</body>
+
+</html>
