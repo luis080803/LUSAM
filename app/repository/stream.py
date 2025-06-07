@@ -79,3 +79,27 @@ class StreamRepository:
             "_id": ObjectId(stream_id),
             "activo": True
         })
+    
+    @staticmethod
+    async def update_usuario_stream(usuario_antiguo: str, usuario_nuevo: str) -> dict:
+        try:
+            result = await db[StreamRepository.COLLECTION_NAME].update_many(
+                {"Usuario": usuario_antiguo},
+                {"$set": {"Usuario": usuario_nuevo}}
+            )
+
+            if result.modified_count == 0:
+                return {
+                    "success": False,
+                    "message": "No se encontró el usuario o no hubo cambios"
+                }
+
+            return {
+                "success": True,
+                "message": f"Se actualizaron {result.modified_count} documento(s)"
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Error al actualizar usuarios: {str(e)}"
+            }

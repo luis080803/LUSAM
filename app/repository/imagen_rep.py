@@ -43,3 +43,12 @@ class ImagenRepository:
         if imagen:
             imagen["_id"] = str(imagen["_id"])
         return imagen
+    
+    @staticmethod
+    async def update_usuario_imagen(usuario_antiguo: str, usuario_nuevo: str) -> int:
+        result = await db[ImagenRepository.COLLECTION_NAME].update_many(
+            {"Usuario": usuario_antiguo},
+            {"$set": {"Usuario": usuario_nuevo}}
+        )
+        return result.modified_count
+    

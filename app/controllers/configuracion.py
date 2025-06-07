@@ -2,7 +2,9 @@ from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from app.repository.usuario_rep import UsuarioRepository
-
+from app.repository.imagen_rep import ImagenRepository
+from app.repository.stream import  StreamRepository
+from app.repository.preguntas import PreguntasSeguridadRepository
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/views/templates")
@@ -55,10 +57,15 @@ async def actualizar_perfil(
         datos_actualizados=datos_actualizados
     )
     
-    # Si cambió el nombre de usuario, actualizar la cookie
     if actualizado and Usuario != current_user:
-        response = RedirectResponse(url="/login", status_code=303)
-        response.set_cookie(key="current_user", value=Usuario)
-        return response
-    
+            # 2. Actualizar referencias del usuario en todas las colecciones relacionadas
+            await ImagenRepository.update_usuario_imagen(current_user, Usuario)
+            await PreguntasSeguridadRepository.update_usuario_preguntas(current_user, Usuario)
+            await StreamRepository.update_usuario_stream(current_user, Usuario)
+
+            # 3. Actualizar la cookie
+            response = RedirectResponse(url="/login", status_code=303)
+            response.set_cookie(key="current_user", value=Usuario)
+            return response
+
     return RedirectResponse(url="/login", status_code=303)
