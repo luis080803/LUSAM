@@ -34,15 +34,6 @@ class ImagenRepository:
             {"_id": ObjectId(image_id)}
         )
         return result.deleted_count > 0
-
-    @staticmethod
-    async def get_image_by_id(image_id: str) -> Optional[dict]:
-        imagen = await db[ImagenRepository.COLLECTION_NAME].find_one(
-            {"_id": ObjectId(image_id)}
-        )
-        if imagen:
-            imagen["_id"] = str(imagen["_id"])
-        return imagen
     
     @staticmethod
     async def update_usuario_imagen(usuario_antiguo: str, usuario_nuevo: str) -> int:
