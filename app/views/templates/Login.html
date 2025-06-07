@@ -205,6 +205,9 @@
                 <input type="text" id="username" name="nombre_usuario" required>
                 <label for="contrasena">CONTRASEÑA</label>
                 <input type="password" id="password" name="contrasena" required>
+                <div id="login-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none; text-align:left; width:100%">
+                    Usuario o contraseña incorrectos.
+                </div>
                 <input type="submit" value="LOG IN">
                 <div class="login-links">
                     <a href="/registro">¿No tienes cuenta? ¡Regístrate!</a>
@@ -214,6 +217,13 @@
 
         </div>
     </div>
+    <script>
+        // Verificar si hay un parámetro de error en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'invalid_credentials') {
+            document.getElementById('login-warning').style.display = 'block';
+        }
+    </script>
 </body>
 
 </html>
