@@ -22,11 +22,9 @@ async def mostrar_pagina_verstream(request: Request):
 @router.get("/verificar_stream/{stream_id}")
 async def verificar_stream(stream_id: str):
     # Usa tu repositorio para verificar si el stream existe y está activo
-    stream = StreamRepository.obtener_stream_activo_por_id(stream_id)
+    stream = await StreamRepository.obtener_stream_activo_por_id(stream_id)
     
     if not stream:
         return {"existe": False}
     
     return {"existe": True}
-
-
