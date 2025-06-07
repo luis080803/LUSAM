@@ -369,7 +369,7 @@
                     }
 
                     streamId = data.stream_id;
-                    // 🔔 Actualizar el elemento HTML con el código de acceso
+                    // Actualizar el elemento HTML con el código de acceso
                     document.getElementById("codigo-acceso").textContent = streamId;
 
                     video.src = `/deteccion_feed/${streamId}`;
@@ -535,7 +535,7 @@
                 const data = await res.json();
                 document.getElementById("distancia").innerText = data.distancia;
             } catch (e) {
-                console.error("❌ Error al obtener la distancia:", e);
+                console.error("Error al obtener la distancia:", e);
             }
         }
 
