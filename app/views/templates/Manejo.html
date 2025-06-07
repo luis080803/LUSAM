@@ -229,6 +229,31 @@
         .start-stream:hover {
             background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
         }
+
+        .alert-message {
+            margin: 1rem auto;
+            padding: 1rem 2rem;
+            border-radius: 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: rgba(10, 10, 20, 0.85);
+            border: 2px solid;
+            box-shadow: 0 0 24px rgba(0, 234, 255, 0.27);
+            max-width: 500px;
+            text-align: center;
+            animation: fadeOut 2s forwards;
+            animation-delay: 2s;
+        }
+
+        .alert-success {
+            border-color: #00eaff;
+            color: #00eaff;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
     </style>
 </head>
 
@@ -272,6 +297,7 @@
         </div>
 
         <div class="controls-container">
+            <div id="captureMessage" class="alert-message alert-success" style="display: none;">Captura realizada</div>
             <h2 class="controls-title">CONTROLES</h2>
 
             <div class="control-buttons">
@@ -343,7 +369,7 @@
                     }
 
                     streamId = data.stream_id;
-                    // 🔔 Actualizar el elemento HTML con el código de acceso
+                    // Actualizar el elemento HTML con el código de acceso
                     document.getElementById("codigo-acceso").textContent = streamId;
 
                     video.src = `/deteccion_feed/${streamId}`;
@@ -405,9 +431,9 @@
 
 
         function tomarFoto() {
-            // Asume que stream_id es una variable global disponible
+            
             const datos = {
-                stream_id: streamId  // Usa snake_case para coincidir con el backend
+                stream_id: streamId  
             };
 
             console.log("stream_id enviado:", window.stream_id);
@@ -422,7 +448,13 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('Foto guardada:', data);
-                    // Aquí puedes manejar la respuesta
+                    // Mostrar mensaje de éxito
+                    const captureMessage = document.getElementById('captureMessage');
+                    captureMessage.style.display = 'block';
+                    // Ocultar mensaje después de 2 segundos
+                    setTimeout(() => {
+                        captureMessage.style.display = 'none';
+                    }, 2000);
                 })
                 .catch(error => {
                     console.error('Error al tomar la foto:', error);
@@ -503,7 +535,7 @@
                 const data = await res.json();
                 document.getElementById("distancia").innerText = data.distancia;
             } catch (e) {
-                console.error("❌ Error al obtener la distancia:", e);
+                console.error("Error al obtener la distancia:", e);
             }
         }
 
