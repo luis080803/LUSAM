@@ -98,6 +98,37 @@
             justify-content: center;
             flex-wrap: wrap;
         }
+
+        .alert-message {
+            position: relative;
+            margin: 1rem auto;
+            padding: 1rem 2rem;
+            border-radius: 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: rgba(10, 10, 20, 0.85);
+            border: 2px solid;
+            box-shadow: 0 0 24px rgba(0, 234, 255, 0.27);
+            max-width: 500px;
+            text-align: center;
+            animation: fadeOut 2s forwards;
+            animation-delay: 2s;
+        }
+
+        .alert-warning {
+            border-color: #ff5252;
+            color: #ff5252;
+        }
+
+        .alert-success {
+            border-color: #00eaff;
+            color: #00eaff;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
     </style>
 </head>
 
@@ -117,18 +148,33 @@
                 style="display: none; width: 100%; max-width: 640px; transform: rotate(180deg);" />
         </div>
 
+        <div id="alertContainer"></div>
+
         <div class="buttons-container">
             <button class="btn-menu" onclick="window.location.href='/menu'">Regresar al Menú</button>
         </div>
     </div>
 
     <script>
-    async function cargarStream() {
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert-message alert-${type}`;
+            alertDiv.textContent = message;
+            alertContainer.innerHTML = ''; // Limpiar alertas anteriores
+            alertContainer.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 4000);
+        }
+
+        async function cargarStream() {
             const streamId = document.getElementById("streamIdInput").value.trim();
             const video = document.getElementById("videoFeed");
 
             if (!streamId) {
-                alert("Por favor, ingresa un ID de stream.");
+                showAlert("Por favor, ingresa un ID de stream.", "warning");
                 return;
             }
 
@@ -138,17 +184,16 @@
                 const data = await response.json();
 
                 if (data.existe) {
-                    // Si el stream existe, asignar la fuente del video
-                    alert("si existe");
+                    showAlert("Stream encontrado", "success");
                     video.src = `/stream/${streamId}`;
                     video.style.display = "block";  // Mostrar el video
                 } else {
-                    alert("El stream no existe o no está activo.");
+                    showAlert("El stream no existe o no está activo.", "warning");
                     video.style.display = "none";  // Ocultar el video si no hay stream
                 }
             } catch (error) {
                 console.error("Error al verificar el stream:", error);
-                alert("Ocurrió un error al buscar el stream.");
+                showAlert("Ocurrió un error al buscar el stream.", "warning");
             }
         }
     </script>
