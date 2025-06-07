@@ -47,6 +47,9 @@ def generar_frames():
         if not ret:
             continue
 
+        # 🔄 ROTAR EL FRAME 180° para alinear imagen con las detecciones
+        frame = cv2.rotate(frame, cv2.ROTATE_180)
+
         # Guardar el último frame
         ultimo_frame = frame.copy()
 

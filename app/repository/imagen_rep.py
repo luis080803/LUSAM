@@ -42,4 +42,13 @@ class ImagenRepository:
             {"$set": {"Usuario": usuario_nuevo}}
         )
         return result.modified_count
+
+    @staticmethod
+    async def get_image_by_id(image_id: str) -> Optional[dict]:
+        imagen = await db[ImagenRepository.COLLECTION_NAME].find_one(
+            {"_id": ObjectId(image_id)}
+        )
+        if imagen:
+            imagen["_id"] = str(imagen["_id"])
+        return imagen
     
