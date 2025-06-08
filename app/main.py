@@ -6,6 +6,7 @@ from app.controllers import manejo
 from app.controllers import guardarpreguntas, login, manejo, salir, registro, recuperacion, verstream, galeria, estadisticas, configuracion, menu, acerca, instrucciones, deteccion, stream,verificarpreguntas
 from app.utils.udp_listener import iniciar_listener_udp
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:

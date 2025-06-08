@@ -132,6 +132,22 @@
             warning.style.display = "none";
             return true;
         }
+
+        // Función para formatear la fecha
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toISOString().split('T')[0];
+        }
+
+        // Cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Formatear la fecha de nacimiento
+            const fechaNacimiento = document.querySelector('input[name="FechaNacimiento"]');
+            if (fechaNacimiento && fechaNacimiento.value) {
+                fechaNacimiento.value = formatDate(fechaNacimiento.value);
+            }
+        });
     </script>
 </head>
 <body>
@@ -167,7 +183,11 @@
         <!-- Fecha de Nacimiento -->
         <div class="user-row">
             <span class="user-label">Fecha Nacimiento:</span>
+<<<<<<< HEAD
+            <input type="date" name="FechaNacimiento" value="{{ usuario.FechaNacimiento.strftime('%Y-%m-%d') if usuario.FechaNacimiento else '' }}" required>
+=======
             <input type="date" name="FechaNacimiento" value="{{ usuario.FechaNacimiento }}" required>
+>>>>>>> 7e1abb382317b6841cbfaa312d2ba0efc525307d
         </div>
 
         <!-- Usuario -->

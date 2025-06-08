@@ -138,20 +138,6 @@
             text-align: left;
         }
     </style>
-    <script>
-        function checkConfirm() {
-            const pass = document.getElementById("password").value;
-            const confirm = document.getElementById("confirmar_password").value;
-            const warning = document.getElementById("confirm-warning");
-
-            if (pass !== confirm) {
-                warning.style.display = "block";
-                return false;
-            }
-            warning.style.display = "none";
-            return true;
-        }
-    </script>
 </head>
 
 <body>
