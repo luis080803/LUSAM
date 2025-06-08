@@ -252,35 +252,48 @@
                 <div class="form-row">
                     <div class="half">
                         <label for="nombre">NOMBRE</label>
-                        <input type="text" id="nombre" name="nombre" required>
+                        <input type="text" id="nombre" name="nombre" required
+                            value="{{ form_data.nombre if form_data else '' }}">
                     </div>
                     <div class="half">
                         <label for="apellido_paterno">APELLIDO PATERNO</label>
-                        <input type="text" id="apellido_paterno" name="apellido_paterno" required>
+                        <input type="text" id="apellido_paterno" name="apellido_paterno" required
+                            value="{{ form_data.apellido_paterno if form_data else '' }}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="half">
                         <label for="apellido_materno">APELLIDO MATERNO</label>
-                        <input type="text" id="apellido_materno" name="apellido_materno">
+                        <input type="text" id="apellido_materno" name="apellido_materno"
+                            value="{{ form_data.apellido_materno if form_data else '' }}">
                     </div>
                     <div class="half">
                         <label for="fecha_nacimiento" style="font-size: 0.75em;">FECHA DE NACIMIENTO</label>
-                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required
+                            value="{{ form_data.fecha_nacimiento if form_data else '' }}">
                     </div>
                 </div>
 
                 <label for="correo">CORREO ELECTRÓNICO</label>
-                <input type="email" id="correo" name="correo" required>
-                <div id="correo-warning"
-                    style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none; text-align:left; width:100%">
-                    Ingresa un correo electrónico válido.</div>
+                <input type="email" id="correo" name="correo" required
+                    value="{{ form_data.correo if form_data else '' }}">
+                {% if correo_existente %}
+                <div style="color:#ff5252; font-size:0.85em; margin-bottom:8px;">
+                    Este correo ya está registrado.
+                </div>
+                {% endif %}
 
                 <div class="form-row">
                     <div class="half">
                         <label for="usuario">USUARIO</label>
-                        <input type="text" id="usuario" name="usuario" required>
+                        <input type="text" id="usuario" name="usuario" required
+                            value="{{ form_data.usuario if form_data else '' }}">
+                        {% if usuario_existente %}
+                        <div style="color:#ff5252; font-size:0.85em; margin-top:4px;">
+                            Usuario ya existente.
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="half">
                         <label for="password">CONTRASEÑA</label>
@@ -288,16 +301,15 @@
                             oninput="validatePassword()">
                     </div>
                 </div>
-                <div id="password-warning"
-                    style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none; text-align:left; width:100%">
+
+                <div id="password-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
                     La contraseña debe tener al menos 8 caracteres.
                 </div>
 
                 <label for="confirmar_password">CONFIRMAR CONTRASEÑA</label>
                 <input type="password" id="confirmar_password" name="confirmar_password" required
                     oninput="validatePassword()">
-                <div id="confirm-warning"
-                    style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none; text-align:left; width:100%">
+                <div id="confirm-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
                     Las contraseñas no coinciden.
                 </div>
 
@@ -309,25 +321,17 @@
                         const confirmWarning = document.getElementById('confirm-warning');
 
                         // Validar longitud mínima
-                        if (password.value.length > 0 && password.value.length < 8) {
-                            passwordWarning.style.display = 'block';
-                        } else {
-                            passwordWarning.style.display = 'none';
-                        }
+                        passwordWarning.style.display = (password.value.length > 0 && password.value.length < 8) ? 'block' : 'none';
 
                         // Validar coincidencia
-                        if (confirmPassword.value.length > 0 && password.value !== confirmPassword.value) {
-                            confirmWarning.style.display = 'block';
-                        } else {
-                            confirmWarning.style.display = 'none';
-                        }
+                        confirmWarning.style.display = (confirmPassword.value.length > 0 && password.value !== confirmPassword.value) ? 'block' : 'none';
 
                         // Deshabilitar submit si no cumple requisitos
-                        document.querySelector('form').querySelector('input[type="submit"]').disabled =
-                            (password.value.length < 8 || password.value !== confirmPassword.value);
+                        document.querySelector('input[type="submit"]').disabled = (
+                            password.value.length < 8 || password.value !== confirmPassword.value
+                        );
                     }
 
-                    // Validar al cargar (por si hay valores precargados)
                     document.addEventListener('DOMContentLoaded', validatePassword);
                 </script>
 
