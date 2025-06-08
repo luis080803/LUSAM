@@ -14,7 +14,7 @@
             color: #e1bfff;
             min-height: 100vh;
             background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
-                url('/static/car.jpg') no-repeat center center fixed;
+                        url('/static/car.jpg') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -177,42 +177,37 @@
 
         <form method="POST" action="/actualizar_perfil" id="perfilForm" onsubmit="return checkConfirm()">
 
-            <!-- Nombre -->
             <div class="user-row">
                 <span class="user-label">Nombre:</span>
                 <input type="text" name="Nombre" value="{{ usuario_datos.Nombre if usuario_datos else usuario.Nombre }}"
                     required>
             </div>
 
-            <!-- Apellido Paterno -->
             <div class="user-row">
                 <span class="user-label">Apellido Paterno:</span>
                 <input type="text" name="ApellidoPaterno"
                     value="{{ usuario_datos.ApellidoPaterno if usuario_datos else usuario.ApellidoPaterno }}" required>
             </div>
 
-            <!-- Apellido Materno -->
             <div class="user-row">
                 <span class="user-label">Apellido Materno:</span>
                 <input type="text" name="ApellidoMaterno"
                     value="{{ usuario_datos.ApellidoMaterno if usuario_datos else usuario.ApellidoMaterno }}">
             </div>
 
-            <!-- Correo -->
             <div class="user-row">
                 <span class="user-label">Correo:</span>
                 <input type="text" name="Correo" value="{{ usuario_datos.Correo if usuario_datos else usuario.Correo }}"
                     required>
             </div>
 
-            <!-- Fecha de Nacimiento -->
             <div class="user-row">
                 <span class="user-label">Fecha Nacimiento:</span>
                 <input type="date" name="FechaNacimiento"
-                    value="{{ usuario_datos.FechaNacimiento if usuario_datos else usuario.FechaNacimiento }}" required>
+                    value="{{ usuario_datos.FechaNacimiento if usuario_datos and usuario_datos.FechaNacimiento else (usuario.FechaNacimiento if usuario.FechaNacimiento else '') }}"
+                    required>
             </div>
 
-            <!-- Usuario -->
             <div class="user-row">
                 <span class="user-label">Usuario:</span>
                 <input type="text" name="Usuario"
@@ -224,7 +219,6 @@
                 {% endif %}
             </div>
 
-            <!-- Contraseña -->
             <div class="pass-fields">
                 <div>
                     <label for="password">Nueva contraseña</label>
@@ -233,16 +227,14 @@
                 <div>
                     <label for="confirmar_password">Confirmar nueva contraseña</label>
                     <input type="password" id="confirmar_password" name="confirmar_password" minlength="8">
-                    <div id="confirm-warning" class="warning" style="display: none;">Las contraseñas no coinciden.</div>
+                    <div id="confirm-warning" class="warning">Las contraseñas no coinciden.</div>
                 </div>
             </div>
 
-            <!-- Botón guardar -->
             <div class="btns">
                 <button class="save-btn" type="submit">Guardar Cambios</button>
             </div>
         </form>
-
 
         <div class="btns">
             <button class="btn-menu" onclick="window.location.href='/menu';return false;">Regresar al Menú</button>
