@@ -83,4 +83,4 @@ class UsuarioRepository:
             {"Usuario": nombre_usuario},
             {"$set": {"Password": hashed_password}}
         )
-        return result.modified_count > 0
+        return True

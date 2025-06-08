@@ -48,5 +48,9 @@ async def login(
         # Redirigir con parámetro de error
         return RedirectResponse(
             url="/login?error=invalid_credentials",
+<<<<<<< HEAD
             status_code=303
         )
+=======
+            status_code=303)
+>>>>>>> 4056675b7c3dd699a9530834c7ac9bbc9c420a2d
