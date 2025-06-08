@@ -23,6 +23,22 @@ async def registrar_usuario(
     usuario: str = Form(...),
     password: str = Form(...),
 ):
+    existente = await UsuarioRepository.obtener_usuario_por_usuario(usuario)
+    if existente:
+        # Pasa los datos ingresados para que se mantengan en el formulario
+        return templates.TemplateResponse("registro.html", {
+            "request": request,
+            "usuario_existente": True,
+        "form_data": {
+            "nombre": nombre,
+            "apellido_paterno": apellido_paterno,
+            "apellido_materno": apellido_materno,
+            "fecha_nacimiento": fecha_nacimiento.isoformat(),  # formato ISO para <input type="date">
+            "correo": correo,
+            "usuario": usuario
+        }
+
+        })
 
     nuevo_usuario = UsuarioBase(
         Nombre=nombre,
@@ -31,16 +47,13 @@ async def registrar_usuario(
         Correo=correo,
         FechaNacimiento=fecha_nacimiento,
         Usuario=usuario,
-        Password=password,  
+        Password=password,
         Status=True,
         Fecha_registro=date.today()
     )
- 
-
     await UsuarioRepository.crear_usuario(nuevo_usuario)
 
-    # Redirigir a preguntas de seguridad pasando el usuario como parámetro
     return RedirectResponse(
-        url=f"/preguntasseguridad?usuario={usuario}",  # Pasa el usuario como query param
+        url=f"/preguntasseguridad?usuario={usuario}",
         status_code=303
     )

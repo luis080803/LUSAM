@@ -38,8 +38,8 @@
         .navbar .user {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 0 32px;
+            gap: 10px;
+            padding: 0 20px;
         }
 
         .navbar .user-icon {
@@ -55,9 +55,9 @@
         }
 
         .navbar .user span {
-            color: #fff;
+            font-size: 1.2em;
             font-weight: bold;
-            font-size: 1.1em;
+            color: #00eaff;
         }
 
         .navbar .nav-links {
@@ -163,8 +163,7 @@
     <div class="overlay"></div>
     <div class="navbar">
         <div class="user">
-            <div class="user-icon">&#128100;</div>
-            <span>Mi usuario</span>
+            <span>Usuario: {{ usuario }}</span>
         </div>
         <div class="nav-links">
             <a href="#">INSTRUCCIONES</a>

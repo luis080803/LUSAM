@@ -172,6 +172,14 @@
     <div class="recovery-container">
         <h1 class="recovery-title">RECUPERACIÓN DE CUENTA</h1>
 
+        <div class="warning" id="stepWarning" style="display: none;">
+            Por favor, selecciona una pregunta y proporciona una respuesta
+        </div>
+
+        <div class="warning" id="userWarning" style="display: none;">
+            Usuario no definido en la URL
+        </div>
+
         <div class="step-indicator">
             <div class="step active" id="step1">1</div>
             <div class="step" id="step2">2</div>
@@ -234,12 +242,14 @@
     if (currentStep === 1) {
         const question1 = document.getElementById('question1').value;
         const answer1 = document.getElementById('answer1').value;
+        const warningElement = document.getElementById('stepWarning');
 
         if (!question1 || !answer1) {
-            alert('Por favor, selecciona una pregunta y proporciona una respuesta');
+            warningElement.style.display = 'block';
             return;
         }
 
+        warningElement.style.display = 'none';
         // Mostrar la siguiente sección
         document.getElementById('step1-container').style.display = 'none';
         document.getElementById('step2-container').style.display = 'block';
@@ -256,9 +266,11 @@
         const answer1 = document.getElementById('answer1').value;
         const question2 = document.getElementById('question2').value;
         const answer2 = document.getElementById('answer2').value;
+        const warningElement = document.getElementById('stepWarning');
+        const userWarningElement = document.getElementById('userWarning');
 
         if (!question2 || !answer2) {
-            alert('Por favor, selecciona una pregunta y proporciona una respuesta');
+            warningElement.style.display = 'block';
             return;
         }
 
@@ -267,9 +279,12 @@
         const usuario = urlParams.get("usuario");
 
         if (!usuario) {
-            alert("Usuario no definido en la URL");
+            userWarningElement.style.display = 'block';
             return;
         }
+
+        warningElement.style.display = 'none';
+        userWarningElement.style.display = 'none';
 
         const formData = new FormData();
         formData.append("pregunta1", question1);
