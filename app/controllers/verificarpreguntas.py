@@ -11,10 +11,9 @@ class VerificarRespuestasInput(BaseModel):
     respuestas: List[str]
 
 # Obtener preguntas de seguridad por usuario
-@router.get("/preguntas/{usuario}")
+@router.get("/preguntas/{usuario}") 
 async def obtener_preguntas(usuario: str):
     preguntas = await PreguntasSeguridadRepository.get_preguntas_by_user(usuario)
-
     if preguntas and "preguntas" in preguntas:
         return {
             "success": True,
