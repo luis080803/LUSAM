@@ -19,7 +19,7 @@ def recibir_distancia():
             mensaje = data.decode().strip()
             if mensaje:
                 _ultima_distancia = mensaje.split()[1]
-                print(_ultima_distancia)
+                #print(_ultima_distancia)
         except Exception as e:
             print(f"❌ Error al recibir UDP: {e}")
 

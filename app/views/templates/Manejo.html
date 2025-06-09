@@ -325,8 +325,8 @@
                     ontouchstart="startCommand('d')" ontouchend="stopCommand()">→</button>
             </div>
             <div class="action-buttons">
-                <button class="action-button">AUTOMÁTICO</button>
-                <button class="action-button">MANUAL</button>
+                <button class="action-button" onclick="detener()">MANUAL</button>
+                <button class="action-button" onclick="iniciarManual()">AUTOMÁTICO</button>
                 <button class="action-button" onclick="tomarFoto()">TOMAR FOTO</button>
                 <button class="action-button" id="detectionButton" onclick="toggleDetection()">IDENTIFICAR
                     OBSTÁCULO</button>
@@ -342,6 +342,8 @@
         let streamId = null;
         let intervaloDistancia;
         let matriculaCarro = "UVCARRITO";
+        let avanzarInterval = null;
+        let detenerManual = false;
 
         const timerElement = document.querySelector('.timer');
         timerElement.style.display = 'none';
@@ -443,9 +445,11 @@
 
                 // Iniciar a leer la distacia 
                 if (!intervaloDistancia) {
-                    intervaloDistancia = setInterval(actualizarDistancia, 500);
+                    intervaloDistancia = setInterval(getDistancia, 100);
                 }
             } else {
+                //Detenemos el modo manual si está activado
+                detener();
                 // Detener stream en backend si tenemos ID
                 if (streamId) {
                     try {
@@ -610,14 +614,52 @@
             }
         }
 
-        async function actualizarDistancia() {
+        async function getDistancia() {
             try {
                 const res = await fetch("/distancia_actual");
                 const data = await res.json();
                 document.getElementById("distancia").innerText = data.distancia;
+                return data.distancia;
             } catch (e) {
                 console.error("Error al obtener la distancia:", e);
+                return null;
             }
+        }
+
+        async function iniciarManual() {
+            detenerManual = false;
+            console.log("Modo manual iniciado...");
+
+            avanzarInterval = setInterval(async () => {
+                if (detenerManual) {
+                    clearInterval(avanzarInterval);
+                    return;
+                }
+
+                const distancia = await getDistancia();
+                if (distancia === null) return;
+
+                if (distancia <= 20) {
+                    console.log("Obstáculo detectado a " + distancia + " cm");
+
+                    const giro = Math.random() < 0.5 ? "a" : "d";
+                    await sendCommand(giro); // Girar
+                    await sendCommand(giro); // Girar
+                    await sendCommand(giro); // Girar
+                    await sendCommand(giro); // Girar
+                    await sendCommand(giro); // Girar
+                    await new Promise(r => setTimeout(r, 1000)); // Esperar medio segundo
+                }
+                await sendCommand("w");
+
+            }, 500); // Envía comando cada 500ms
+        }
+
+        // (Opcional) Función para detener el proceso manual
+        function detener() {
+            detenerManual = true;
+            clearInterval(avanzarInterval);
+            console.log("Modo manual detenido.");
         }
     </script>
 
