@@ -257,8 +257,13 @@
         }
 
         @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -266,11 +271,15 @@
 <body>
     <nav>
         <div class="user-profile">
-            <span>Usuario: {{ usuario }}</span>
+            <span>Bienvenido: {{ usuario.capitalize() }}</span>
         </div>
         <div class="nav-links">
+            <a href="/menu">Regresar al menú</a>
+            <a href="/instrucciones">Instrucciones</a>
             <a href="/acerca">Acerca de</a>
+
         </div>
+
     </nav>
 
     <div class="main-content">
@@ -332,6 +341,7 @@
         let seconds = 0;
         let streamId = null;
         let intervaloDistancia;
+        let matriculaCarro = "UVCARRITO";
 
         const timerElement = document.querySelector('.timer');
         timerElement.style.display = 'none';
@@ -352,15 +362,43 @@
                 if (streamName === null || streamName.trim() === "") {
                     return; // El usuario canceló o no ingresó nombre
                 }
-
                 try {
+
+                    // 1. Verificar estado actual del carro
+                    const checkResponse = await fetch(`/carros/estado/${matriculaCarro}`);
+                    const estadoData = await checkResponse.json();
+
+                    if (!checkResponse.ok) {
+                        alert("Error al verificar estado del carro: " + estadoData.detail);
+                        return;
+                    }
+
+                    if (estadoData.enUso === true) {
+                        alert("El carro no está disponible actualmente");
+                        return;
+                    }
+
+                    // 2. Marcar carro como en uso
+                    await fetch(`/carros/actualizar-estado`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            matricula: matriculaCarro,
+                            enUso: true
+                        })
+                    });
+
+                    // 3. Continuar con el inicio del stream
                     const response = await fetch("/start_stream", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded"
                         },
                         body: new URLSearchParams({
-                            titulo: streamName
+                            titulo: streamName,
+                            matricula: matriculaCarro // Agregamos la matrícula al stream
                         })
                     });
 
@@ -372,20 +410,35 @@
                     }
 
                     streamId = data.stream_id;
-                    // Actualizar el elemento HTML con el código de acceso
                     document.getElementById("codigo-acceso").textContent = streamId;
 
                     video.src = `/deteccion_feed/${streamId}`;
                     streaming = true;
                     document.getElementById("streamButton").innerText = "DETENER STREAM";
                     video.style.display = "block";
-                    infoBoxes.style.display = "flex"; // Nuevo: mostrar los boxes de info
+                    infoBoxes.style.display = "flex";
                     timerElement.style.display = 'block';
                     startTimer();
                     enableControlButtons(true);
                 } catch (err) {
-                    console.error("Error al iniciar stream:", err);
-                    alert("Error al iniciar el stream.");
+                    console.error("Error en el proceso:", err);
+                    alert("Error: " + err.message);
+
+                    // Intenta revertir el estado del carro si falló algo después de marcarlo como en uso
+                    try {
+                        await fetch(`/carros/actualizar-estado`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                matricula: matriculaCarro,
+                                enUso: false
+                            })
+                        });
+                    } catch (revertErr) {
+                        console.error("Error al revertir estado:", revertErr);
+                    }
                 }
 
                 // Iniciar a leer la distacia 
@@ -405,11 +458,37 @@
                     streamId = null;
                 }
 
+                // Desactivar detección de objetos si está activa
+                if (detecting) {
+                    try {
+                        await fetch("/deteccion/toggle", {
+                            method: "POST"
+                        });
+                        detecting = false;
+                        document.getElementById("detectionButton").innerText = "IDENTIFICAR OBSTÁCULO";
+                    } catch (err) {
+                        console.error("Error al desactivar detección:", err);
+                    }
+                }
+
+                // Marcar carro como en desuso
+                await fetch(`/carros/actualizar-estado`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        matricula: matriculaCarro,
+                        enUso: false
+                    })
+                });
+
+
                 video.src = "";
                 streaming = false;
                 document.getElementById("streamButton").innerText = "INICIAR STREAM";
                 video.style.display = "none";
-                infoBoxes.style.display = "none"; // Nuevo: ocultar los boxes de info
+                infoBoxes.style.display = "none";
                 stopTimer();
                 timerElement.style.display = 'none';
                 enableControlButtons(false);
@@ -432,11 +511,10 @@
             });
         }
 
-
         function tomarFoto() {
-            
+
             const datos = {
-                stream_id: streamId  
+                stream_id: streamId
             };
 
             console.log("stream_id enviado:", window.stream_id);

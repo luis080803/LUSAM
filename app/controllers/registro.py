@@ -23,6 +23,7 @@ async def registrar_usuario(
     usuario: str = Form(...),
     password: str = Form(...),
 ):
+    usuario = usuario.lower()
     existente = await UsuarioRepository.obtener_usuario_por_usuario(usuario)
     if existente:
         # Pasa los datos ingresados para que se mantengan en el formulario

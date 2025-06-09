@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from app.config.database import verify_connection
 from app.controllers import manejo
-from app.controllers import guardarpreguntas, login, manejo, salir, registro, recuperacion, verstream, galeria, estadisticas, configuracion, menu, acerca, instrucciones, deteccion, stream,verificarpreguntas
+from app.controllers import guardarpreguntas, login, manejo, salir, registro, recuperacion, verstream, galeria, estadisticas, configuracion, menu, acerca, instrucciones, deteccion, stream,verificarpreguntas, carrito
 from app.utils.udp_listener import iniciar_listener_udp
 
 
@@ -39,7 +39,7 @@ app.include_router(deteccion.router)
 app.include_router(stream.router)
 app.include_router(guardarpreguntas.router)
 app.include_router(verificarpreguntas.router)
-
+app.include_router(carrito.router)
 app.include_router(login.router)
 
 
