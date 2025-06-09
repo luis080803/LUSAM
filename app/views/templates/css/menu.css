@@ -1,0 +1,152 @@
+    
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        nav {
+            background-color: rgba(30, 0, 40, 0.92);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #7b1fa2;
+            box-shadow: 0 2px 12px #7b1fa244;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #7b1fa2;
+            border: 2px solid #00eaff;
+        }
+
+        .user-profile span {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00eaff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #00eaff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7b1fa2;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 3rem;
+            color: #7b1fa2;
+            text-shadow: 0 0 8px #00eaff88;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-section p {
+            color: #e1bfff;
+            font-size: 1.2rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .menu-item {
+            background-color: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 24px #7b1fa244;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 32px #00eaff44;
+            border-color: #00eaff;
+        }
+
+        .menu-item i {
+            font-size: 3rem;
+            color: #00eaff;
+            margin-bottom: 1rem;
+        }
+
+        .menu-item h2 {
+            color: #7b1fa2;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .menu-item p {
+            color: #e1bfff;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .menu-button {
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 0 8px #00eaff55;
+        }
+
+        .menu-button:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+        }
+
+        .logout-button {
+            background: linear-gradient(90deg, #dc3545 60%, #ff6b6b 100%);
+        }
+
+        .logout-button:hover {
+            background: linear-gradient(90deg, #ff6b6b 0%, #dc3545 100%);
+        }
+    

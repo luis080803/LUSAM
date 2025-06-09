@@ -43,5 +43,8 @@ app.include_router(carrito.router)
 app.include_router(login.router)
 
 
-# Montar archivos estáticos
+# Primer montaje (CSS)
+app.mount("/static", StaticFiles(directory="app/views/templates/css"), name="static")
+
+# Segundo montaje (Imágenes - SOBRESCRIBE al primero)
 app.mount("/static", StaticFiles(directory="app/views/static"), name="static")

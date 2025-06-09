@@ -1,39 +1,34 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from app.repository.estadisticas_rep import EstadisticasRepository  
+from fastapi import Request
+from app.repository.carrito_rep import RegistroCarroRepository
+from app.repository.imagen_rep import ImagenRepository
+from app.repository.stream import StreamRepository
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/views/templates")
 
-@router.get("/estadisticas", response_class=HTMLResponse)
-async def mostrar_pagina_verstream(request: Request):
-    """Visualizar estadísticas por usuario"""
 
+@router.get("/estadisticas")
+async def mostrar_estadisticas(request: Request):
+    # Obtener el nombre del usuario desde la cookie
     usuario = request.cookies.get("current_user")
+    
     if not usuario:
-        return templates.TemplateResponse(
-            "Estadisticas.html",
-            {
-                "request": request,
-                "title": "Panel de Manejo",
-                "error": "Usuario no autenticado",
-                "usuario": None,
-                "fotos": 0,
-                "obstaculos": 0
-            }
-        )
-
-    # Obtener estadísticas desde el repositorio
-    estadisticas = await EstadisticasRepository.obtener_estadisticas(usuario)
-
-    return templates.TemplateResponse(
-        "Estadisticas.html",
-        {
+        # Redirigir o lanzar error si no hay cookie de usuario
+        return templates.TemplateResponse("Login.html", {
             "request": request,
-            "title": "Panel de Manejo",
-            "usuario": usuario,
-            "fotos": estadisticas["fotos"],
-            "obstaculos": estadisticas["obstaculos"]
-        }
-    )
+            "mensaje": "Usuario no autenticado."
+        })
+    
+    # Obtener los datos de cada repositorio
+    carros = await RegistroCarroRepository.get_carros_by_user(usuario)
+    imagenes = await ImagenRepository.get_images_by_user(usuario)
+    streams = await StreamRepository.obtener_streams_por_usuario(usuario)
+    
+    return templates.TemplateResponse("Estadisticas.html", {
+        "request": request,
+        "carros_count": len(carros),
+        "imagenes_count": len(imagenes),
+        "streams_count": len(streams)
+    })

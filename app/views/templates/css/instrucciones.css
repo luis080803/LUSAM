@@ -1,0 +1,99 @@
+ 
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                       url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        nav {
+            background-color: rgba(30, 0, 40, 0.92);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #7b1fa2;
+            box-shadow: 0 2px 12px #7b1fa244;
+        }
+
+        .nav-links a {
+            color: #00eaff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7b1fa2;
+        }
+
+        .instructions-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(10, 10, 20, 0.85);
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 24px #7b1fa244;
+        }
+
+        .instructions-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: 2px;
+            color: #7b1fa2;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+
+        .instruction-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #7b1fa2;
+            background-color: rgba(10, 10, 20, 0.5);
+        }
+
+        .instruction-section h2 {
+            color: #00eaff;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .instruction-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .instruction-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .instruction-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .instruction-list li:before {
+            content: "→";
+            color: #00eaff;
+            position: absolute;
+            left: 0;
+        }
+
+        .warning {
+            color: #ff6b6b;
+            font-weight: bold;
+            padding: 1rem;
+            border: 1px solid #ff6b6b;
+            margin: 1rem 0;
+            background-color: rgba(255, 107, 107, 0.1);
+        }

@@ -1,0 +1,261 @@
+  
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101018;
+            color: #e1bfff;
+            min-height: 100vh;
+            background: linear-gradient(rgba(10, 10, 20, 0.92), rgba(10, 10, 20, 0.92)),
+                url('/static/car.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        nav {
+            background-color: rgba(30, 0, 40, 0.92);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #7b1fa2;
+            box-shadow: 0 2px 12px #7b1fa244;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #7b1fa2;
+            border: 2px solid #00eaff;
+        }
+
+        .user-profile span {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00eaff;
+        }
+
+        .back-button {
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 8px #00eaff55;
+            margin-right: 1rem;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #00eaff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7b1fa2;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .stream-container {
+            flex: 1;
+            background-color: rgba(10, 10, 20, 0.85);
+            padding: 1rem;
+            border-radius: 0;
+            border: 2px solid #7b1fa2;
+            position: relative;
+            box-shadow: 0 0 24px #7b1fa244;
+        }
+
+        .stream-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .stream-header i {
+            color: #00eaff;
+        }
+
+        .timer {
+            background-color: rgba(10, 10, 20, 0.92);
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            border: 1.5px solid #00eaff;
+            color: #00eaff;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        #videoStream {
+            width: 100%;
+            height: 450px;
+            background: url('carretera.jpg') no-repeat center center;
+            background-size: cover;
+            border-radius: 0;
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 16px #00eaff44;
+            position: relative;
+        }
+
+        .controls-container {
+            width: 400px;
+            padding: 2rem;
+            background-color: rgba(10, 10, 20, 0.85);
+            border-radius: 0;
+            border: 2px solid #7b1fa2;
+            box-shadow: 0 0 24px #7b1fa244;
+        }
+
+        .controls-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: 2px;
+            color: #7b1fa2;
+            text-shadow: 0 0 8px #00eaff88;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .control-button {
+            width: 60px;
+            height: 60px;
+            background-color: #181828;
+            border: 2px solid #00eaff;
+            color: #00eaff;
+            border-radius: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 8px #7b1fa244;
+        }
+
+        .control-button:hover {
+            background-color: #7b1fa2;
+            color: #fff;
+            border-color: #7b1fa2;
+        }
+
+        .action-buttons {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .action-button {
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 0 8px #00eaff55;
+        }
+
+        .action-button:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .start-stream {
+            background: linear-gradient(90deg, #7b1fa2 60%, #00eaff 100%);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            width: 100%;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 8px #00eaff55;
+        }
+
+        .start-stream:hover {
+            background: linear-gradient(90deg, #00eaff 0%, #7b1fa2 100%);
+        }
+
+        .alert-message {
+            margin: 1rem auto;
+            padding: 1rem 2rem;
+            border-radius: 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: rgba(10, 10, 20, 0.85);
+            border: 2px solid;
+            box-shadow: 0 0 24px rgba(0, 234, 255, 0.27);
+            max-width: 500px;
+            text-align: center;
+            animation: fadeOut 2s forwards;
+            animation-delay: 2s;
+        }
+
+        .alert-success {
+            border-color: #00eaff;
+            color: #00eaff;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+    
