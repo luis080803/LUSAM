@@ -70,6 +70,5 @@ app.include_router(verificarpreguntas.router)
 app.include_router(carrito.router)
 app.include_router(login.router)
 
-# Montaje de archivos estáticos
-app.mount("/static", StaticFiles(directory="app/views/templates/css"), name="static")
+app.mount("/static/css", StaticFiles(directory="app/views/templates/css"), name="css")
 app.mount("/static", StaticFiles(directory="app/views/static"), name="static")
