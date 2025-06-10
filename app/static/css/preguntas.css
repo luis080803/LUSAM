@@ -1,0 +1,60 @@
+.submit-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    display: block;
+    position: relative;
+    z-index: 10;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+.submit-button:active {
+    background-color: #3d8b40;
+}
+
+/* Asegurar que el contenedor tenga posición relativa */
+.recovery-container {
+    position: relative;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+
+/* Asegurar que los elementos de entrada no interfieran con el botón */
+.question-select,
+.answer-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    z-index: 1;
+}
+
+/* Asegurar que las advertencias sean visibles */
+.warning {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+    display: none;
+    z-index: 2;
+} 

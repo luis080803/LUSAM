@@ -7,7 +7,7 @@ import os
 # configuración de la url de conexión a mongodb
 # os.getenv busca una variable de entorno llamada "MONGODB_URL"
 # si no existe, usa la url por defecto que apunta a un cluster de mongodb atlas
-MONGODB_URL = os.getenv("MONGODB_URL", "mongodb+srv://samuelgvelandia:y4hzzxjfh39APZn3@cluster0.2fkf5oz.mongodb.net/")
+MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017/")
 # nombre de la base de datos que se usa en la aplicación
 DB_NAME = "Lusam"
 

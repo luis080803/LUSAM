@@ -56,7 +56,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
             "/recuperacion",
             "/static",
             "/favicon.ico",
-            "/preguntas"
+            "/preguntas",
+            "/guardar-preguntas-seguridad"
         ]
 
         # si la ruta es pública, permite el acceso sin autenticación
