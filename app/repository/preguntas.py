@@ -3,6 +3,7 @@ from typing import List, Optional, Dict
 from app.models.preguntasrecuperacion import PreguntasSeguridadBase
 from app.config.database import db
 from pymongo.errors import DuplicateKeyError
+from app.utils.password_utils import verify_password
 
 class PreguntasSeguridadRepository:
     # Definimos el nombre de la colección como constante de clase
@@ -10,7 +11,7 @@ class PreguntasSeguridadRepository:
 
     @staticmethod
     async def create_preguntas(preguntas: PreguntasSeguridadBase) -> Dict:
-        preguntas_dict = preguntas.dict()
+        preguntas_dict = preguntas.model_dump()
         preguntas_dict["fecha_creacion"] = datetime.utcnow()
             
         await db[PreguntasSeguridadRepository.COLLECTION_NAME].insert_one(preguntas_dict)
@@ -24,7 +25,7 @@ class PreguntasSeguridadRepository:
     @staticmethod
     async def update_preguntas(usuario: str, preguntas: PreguntasSeguridadBase) -> Dict:
 
-        preguntas_dict = preguntas.dict()
+        preguntas_dict = preguntas.model_dump()
         preguntas_dict["fecha_actualizacion"] = datetime.utcnow()
             
         result = await db[PreguntasSeguridadRepository.COLLECTION_NAME].update_one(
@@ -57,7 +58,6 @@ class PreguntasSeguridadRepository:
 
     @staticmethod
     async def verify_respuestas(usuario: str, respuestas: List[str]) -> Dict:
-            
         preguntas = await PreguntasSeguridadRepository.get_preguntas_by_user(usuario)
             
         if not preguntas:
@@ -66,18 +66,18 @@ class PreguntasSeguridadRepository:
                 "message": "Usuario no encontrado"
             }
                 
-        # Comparamos las respuestas (case insensitive)
-        stored_answers = [a.lower().strip() for a in preguntas["respuestas"]]
-        provided_answers = [a.lower().strip() for a in respuestas]
+        # Verificar cada respuesta hasheada
+        stored_answers = preguntas["respuestas"]
+        for i, (stored, provided) in enumerate(zip(stored_answers, respuestas)):
+            if not verify_password(provided.lower().strip(), stored):
+                return {
+                    "success": False,
+                    "message": "Respuestas incorrectas"
+                }
             
-        if stored_answers == provided_answers:
-            return {
-                "success": True,
-                "message": "Respuestas correctas"
-            }
         return {
-            "success": False,
-            "message": "Respuestas incorrectas"
+            "success": True,
+            "message": "Respuestas correctas"
         }
 
 
