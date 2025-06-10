@@ -31,6 +31,7 @@ env/
 ENV/
 entorno2/
 .env
+my_env/
 
 # IDE
 .idea/
