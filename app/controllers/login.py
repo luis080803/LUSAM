@@ -26,8 +26,9 @@ async def show_login(request: Request):
 async def login(
     request: Request,
     nombre_usuario: str = Form(...),
-    contrasena: str = Form(...)
+    contrasena: str = Form(...) 
 ):
+    nombre_usuario = nombre_usuario.lower()
     """Controlador que procesa el inicio de sesión y establece las cookies de sesión"""
     # verificamos las credenciales del usuario en la base de datos
     usuario = await UsuarioRepository.verificar_credenciales(nombre_usuario, contrasena)

@@ -22,7 +22,7 @@
         <!-- Contenedor donde se mostrará el video -->
         <div class="stream-view">
             <img id="videoFeed" src="/stream/{stream_id}" alt="Stream del espectador"
-                style="display: none; width: 100%; max-width: 640px; transform: rotate(180deg);" />
+                style="display: none; width: 100%; max-width: 640px;transform: rotate(360deg);" />
         </div>
 
         <div id="alertContainer"></div>
@@ -32,48 +32,79 @@
         </div>
     </div>
 
-    <script>
-        function showAlert(message, type) {
-            const alertContainer = document.getElementById('alertContainer');
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert-message alert-${type}`;
-            alertDiv.textContent = message;
-            alertContainer.innerHTML = ''; // Limpiar alertas anteriores
-            alertContainer.appendChild(alertDiv);
+ <script>
+    let streamActivoId = null;
+    let verificacionIntervalo = null;
 
-            setTimeout(() => {
-                alertDiv.remove();
-            }, 4000);
+    function showAlert(message, type) {
+        const alertContainer = document.getElementById('alertContainer');
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert-message alert-${type}`;
+        alertDiv.textContent = message;
+        alertContainer.innerHTML = ''; // Limpiar alertas anteriores
+        alertContainer.appendChild(alertDiv);
+
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 4000);
+    }
+
+    async function cargarStream() {
+        const streamId = document.getElementById("streamIdInput").value.trim();
+        const video = document.getElementById("videoFeed");
+
+        if (!streamId) {
+            showAlert("Por favor, ingresa un ID de stream.", "warning");
+            return;
         }
 
-        async function cargarStream() {
-            const streamId = document.getElementById("streamIdInput").value.trim();
-            const video = document.getElementById("videoFeed");
+        try {
+            const response = await fetch(`/verificar_stream/${streamId}`);
+            const data = await response.json();
 
-            if (!streamId) {
-                showAlert("Por favor, ingresa un ID de stream.", "warning");
-                return;
+            if (data.existe) {
+                showAlert("Stream encontrado", "success");
+                video.src = `/stream/${streamId}`;
+                video.style.display = "block";
+                streamActivoId = streamId;
+
+                // Iniciar verificación periódica
+                if (verificacionIntervalo) clearInterval(verificacionIntervalo);
+                verificacionIntervalo = setInterval(() => verificarStreamActivo(streamId), 5000);
+            } else {
+                showAlert("El stream no existe o ha finalizado.", "warning");
+                video.style.display = "none";
+                streamActivoId = null;
+                if (verificacionIntervalo) clearInterval(verificacionIntervalo);
             }
-
-            // Verificar si el stream existe y está activo
-            try {
-                const response = await fetch(`/verificar_stream/${streamId}`);
-                const data = await response.json();
-
-                if (data.existe) {
-                    showAlert("Stream encontrado", "success");
-                    video.src = `/stream/${streamId}`;
-                    video.style.display = "block";  // Mostrar el video
-                } else {
-                    showAlert("El stream no existe o no ha finalizado.", "warning");
-                    video.style.display = "none";  // Ocultar el video si no hay stream
-                }
-            } catch (error) {
-                console.error("Error al verificar el stream:", error);
-                showAlert("Ocurrió un error al buscar el stream.", "warning");
-            }
+        } catch (error) {
+            console.error("Error al verificar el stream:", error);
+            showAlert("Ocurrió un error al buscar el stream.", "warning");
         }
-    </script>
+    }
+
+    async function verificarStreamActivo(streamId) {
+        try {
+            const response = await fetch(`/verificar_stream/${streamId}`);
+            const data = await response.json();
+
+            if (!data.existe) {
+                // Ocultar el stream si ya no está activo
+                const video = document.getElementById("videoFeed");
+                video.style.display = "none";
+                showAlert("El stream ha finalizado.", "warning");
+
+                // Limpiar intervalo y stream activo
+                clearInterval(verificacionIntervalo);
+                verificacionIntervalo = null;
+                streamActivoId = null;
+            }
+        } catch (error) {
+            console.error("Error al verificar si el stream sigue activo:", error);
+        }
+    }
+</script>
+
 </body>
 
 </html>
