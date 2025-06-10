@@ -1,7 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient  # Cambia esta importación
 import os
 
-MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
+MONGODB_URL = os.getenv("MONGODB_URL", "mongodb+srv://samuelgvelandia:y4hzzxjfh39APZn3@cluster0.2fkf5oz.mongodb.net/")
 DB_NAME = "Lusam"
 
 # Conexión asíncrona
