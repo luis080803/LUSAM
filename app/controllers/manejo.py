@@ -8,7 +8,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/views/templates")
 
 # Configuración UDP
-UDP_IP = "192.168.4.1"
+UDP_IP = "192.168.100.190"
 UDP_PORT = 5000
 
 @router.get("/manejo", response_class=HTMLResponse)

@@ -13,7 +13,7 @@ from pydantic import BaseModel
 router = APIRouter()
 
 # configuración de la dirección ip y url del stream de la cámara esp32 que estará en el carrito manejable
-ESP32_IP = "192.168.4.1"
+ESP32_IP = "192.168.100.190" #"192.168.4.1"
 STREAM_URL = f"http://{ESP32_IP}:81/stream"
 
 # cargamos el modelo de detección de objetos
@@ -91,7 +91,7 @@ def toggle_deteccion():
 # endpoint para el streaming con detección mediante peticiones get CON DETECCIÓN DE OBJETOS
 @router.get("/deteccion_feed/{stream_id}") 
 def video_feed(stream_id: str):
-    return StreamingResponse(generar_frames(), # generamos los frames
+    return StreamingResponse(generar_frames(), # generamos los frames 
                              media_type='multipart/x-mixed-replace; boundary=frame') # indicamos el tipo de contenido y el frame
 
 # endpoint para el streaming con detección mediante peticiones get SIN DETECCIÓN DE OBJETOS
