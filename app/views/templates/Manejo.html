@@ -15,7 +15,7 @@
             <span>Bienvenido: {{ usuario.capitalize() }}</span>
         </div>
         <div class="nav-links">
-            <a href="/menu">Regresar al menú</a>
+            <a href="/menu" onclick="detenerStreamAntesDeNavegar(event)">Regresar al menú</a>
             <a href="/instrucciones">Instrucciones</a>
         </div>
 
@@ -399,6 +399,15 @@
             detenerManual = true;
             clearInterval(avanzarInterval);
             console.log("Modo manual detenido.");
+        }
+
+        function detenerStreamAntesDeNavegar(event) {
+            if (streaming) {
+                event.preventDefault();
+                toggleStream().then(() => {
+                    window.location.href = '/menu';
+                });
+            }
         }
     </script>
 
