@@ -4,10 +4,13 @@ from app.models.imagenes import ImagenBase
 from app.config.database import db
 from bson import ObjectId
 
+# repositorio que maneja todas las operaciones de la base de datos 
+# relacionadas con las imágenes
 class ImagenRepository:
-    # Definimos el nombre de la colección como constante de clase
+    # nombre de la colección en mongodb donde se almacenan las imágenes
     COLLECTION_NAME = "capturas"
 
+    # obtiene todas las imágenes asociadas a un usuario específico
     @staticmethod
     async def get_images_by_user(usuario: str) -> List[dict]:
         imagenes = await db[ImagenRepository.COLLECTION_NAME].find(
@@ -17,6 +20,8 @@ class ImagenRepository:
             imagen["_id"] = str(imagen["_id"])
         return imagenes
 
+    # crea un nuevo registro de imagen en la base de datos
+    # combina la fecha con la hora mínima para almacenamiento consistente
     @staticmethod
     async def create_image(imagen: ImagenBase) -> dict:
         imagen_dict = imagen.dict()
@@ -28,6 +33,7 @@ class ImagenRepository:
         new_image["_id"] = str(new_image["_id"])
         return new_image
 
+    # elimina una imagen específica de la base de datos usando su id
     @staticmethod
     async def delete_image(image_id: str) -> bool:
         result = await db[ImagenRepository.COLLECTION_NAME].delete_one(
@@ -35,6 +41,8 @@ class ImagenRepository:
         )
         return result.deleted_count > 0
     
+    # actualiza el usuario asociado a una o varias imágenes
+    # lo ocupamos cuando se necesita cambiar el propietario de las imágenes
     @staticmethod
     async def update_usuario_imagen(usuario_antiguo: str, usuario_nuevo: str) -> int:
         result = await db[ImagenRepository.COLLECTION_NAME].update_many(
@@ -43,6 +51,7 @@ class ImagenRepository:
         )
         return result.modified_count
 
+    # busca y retorna una imagen específica usando su id
     @staticmethod
     async def get_image_by_id(image_id: str) -> Optional[dict]:
         imagen = await db[ImagenRepository.COLLECTION_NAME].find_one(
