@@ -5,40 +5,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUSAM Self-Driving</title>
-    <!-- importamos el css -->
+    <!-- importamos el css para los estilos de la página de manejo -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/manejo.css') }}">
 </head>
 
 <body>
+    <!-- barra de navegación superior que contiene el perfil del usuario y enlaces de navegación -->
     <nav>
+        <!-- muestra el nombre del usuario actual en mayúsculas -->
         <div class="user-profile">
             <span>Bienvenido: {{ usuario.capitalize() }}</span>
         </div>
+        <!-- enlaces para navegar entre páginas -->
         <div class="nav-links">
+            <!-- botón para volver al menú principal, con detección de stream activo -->
             <a href="/menu" onclick="detenerStreamAntesDeNavegar(event)">Regresar al menú</a>
+            <!-- enlace a las instrucciones de uso -->
             <a href="/instrucciones">Instrucciones</a>
         </div>
-
     </nav>
 
+    <!-- contenido principal de la página -->
     <div class="main-content">
+        <!-- contenedor principal del stream de video -->
         <div class="stream-container">
+            <!-- botón para iniciar/detener el stream de video -->
             <button class="start-stream" id="streamButton" onclick="toggleStream()">INICIAR STREAM</button>
+            <!-- contenedor del video y temporizador con posicionamiento relativo -->
             <div style="position: relative;">
+                <!-- imagen del stream de la cámara ESP32 -->
                 <img id="videoStream" src="" alt="Stream de ESP32-CAM"
                     style="display: none; width: 100%; max-width: 640px; transform: rotate(360deg);" />
+                <!-- contenedor del temporizador que muestra la duración del stream -->
                 <div class="timer-container">
                     <div class="timer">0:00:0</div>
                 </div>
             </div>
 
-            <!-- Nuevos campos añadidos aquí -->
+            <!-- cajas de información que muestran datos en tiempo real -->
             <div class="info-boxes" style="display: none; gap: 1rem; margin-top: 1rem;" id="infoBoxes">
+                <!-- caja que muestra la distancia actual del sensor -->
                 <div
                     style="flex: 1; background-color: rgba(10, 10, 20, 0.85); padding: 1rem; border: 2px solid #7b1fa2;">
                     <div style="color: #00eaff; font-weight: bold; margin-bottom: 0.5rem;">DISTANCIA</div>
                     <div id="distancia" style="color: #e1bfff; font-size: 1.2rem;">00 cm</div>
                 </div>
+                <!-- caja que muestra el código de acceso al stream -->
                 <div
                     style="flex: 1; background-color: rgba(10, 10, 20, 0.85); padding: 1rem; border: 2px solid #7b1fa2;">
                     <div style="color: #00eaff; font-weight: bold; margin-bottom: 0.5rem;">CÓDIGO DE ACCESO</div>
@@ -47,26 +59,38 @@
             </div>
         </div>
 
+        <!-- contenedor de controles para manejar el carro -->
         <div class="controls-container">
+            <!-- mensaje de confirmación para capturas de foto -->
             <div id="captureMessage" class="alert-message alert-success" style="display: none;">Captura realizada</div>
             <h2 class="controls-title">CONTROLES</h2>
 
+            <!-- panel de botones de dirección para control manual -->
             <div class="control-buttons">
                 <div></div>
+                <!-- botón para avanzar -->
                 <button class="control-button" onmousedown="startCommand('w')" onmouseup="stopCommand()"
                     ontouchstart="startCommand('w')" ontouchend="stopCommand()">↑</button>
                 <div></div>
+                <!-- botón para girar a la izquierda -->
                 <button class="control-button" onmousedown="startCommand('a')" onmouseup="stopCommand()"
                     ontouchstart="startCommand('a')" ontouchend="stopCommand()">←</button>
+                <!-- botón para retroceder -->
                 <button class="control-button" onmousedown="startCommand('s')" onmouseup="stopCommand()"
                     ontouchstart="startCommand('s')" ontouchend="stopCommand()">↓</button>
+                <!-- botón para girar a la derecha -->
                 <button class="control-button" onmousedown="startCommand('d')" onmouseup="stopCommand()"
                     ontouchstart="startCommand('d')" ontouchend="stopCommand()">→</button>
             </div>
+            <!-- panel de botones de acciones especiales -->
             <div class="action-buttons">
+                <!-- botón para activar modo manual -->
                 <button class="action-button" onclick="detener()">MANUAL</button>
+                <!-- botón para activar modo automático -->
                 <button class="action-button" onclick="iniciarManual()">AUTOMÁTICO</button>
+                <!-- botón para capturar una foto del stream -->
                 <button class="action-button" onclick="tomarFoto()">TOMAR FOTO</button>
+                <!-- botón para activar/desactivar detección de obstáculos -->
                 <button class="action-button" id="detectionButton" onclick="toggleDetection()">IDENTIFICAR
                     OBSTÁCULO</button>
             </div>
@@ -74,38 +98,42 @@
     </div>
 
     <script>
-        let streaming = false;
-        let detecting = false;
-        let timerInterval;
-        let seconds = 0;
-        let streamId = null;
-        let intervaloDistancia;
-        let matriculaCarro = "UVCARRITO";
-        let avanzarInterval = null;
-        let detenerManual = false;
+        // variables globales para el control del estado del sistema
+        let streaming = false;      // indica si el stream está activo
+        let detecting = false;      // indica si la detección está activa
+        let timerInterval;          // intervalo para el temporizador
+        let seconds = 0;            // contador de segundos
+        let streamId = null;        // identificador único del stream
+        let intervaloDistancia;     // intervalo para actualizar la distancia
+        let matriculaCarro = "UVCARRITO";  // matrícula del carro actual
+        let avanzarInterval = null; // intervalo para el modo automático
+        let detenerManual = false;  // flag para detener el modo automático
 
+        // configuración inicial del temporizador
         const timerElement = document.querySelector('.timer');
         timerElement.style.display = 'none';
 
-        const COMMAND_DELAY = 100;
-        let currentCommand = null;
-        let commandInterval = null;
+        // configuración de comandos para el control del carro
+        const COMMAND_DELAY = 100;  // retraso entre comandos en milisegundos
+        let currentCommand = null;  // comando actual activo
+        let commandInterval = null; // intervalo para enviar comandos
 
+        // event listeners para detener comandos cuando se suelta el botón
         document.addEventListener('mouseup', stopCommand);
         document.addEventListener('touchend', stopCommand);
 
-        // Nueva función async
+        // función principal para iniciar/detener el stream de video
         async function toggleStream() {
             const video = document.getElementById('videoStream');
 
             if (!streaming) {
+                // solicitar nombre del stream al usuario
                 const streamName = prompt("Ingresa el nombre del stream:");
                 if (streamName === null || streamName.trim() === "") {
-                    return; // El usuario canceló o no ingresó nombre
+                    return;
                 }
                 try {
-
-                    // 1. Verificar estado actual del carro
+                    // verificar si el carro está disponible
                     const checkResponse = await fetch(`/carros/estado/${matriculaCarro}`);
                     const estadoData = await checkResponse.json();
 
@@ -119,7 +147,7 @@
                         return;
                     }
 
-                    // 2. Marcar carro como en uso
+                    // marcar el carro como en uso
                     await fetch(`/carros/actualizar-estado`, {
                         method: "POST",
                         headers: {
@@ -131,7 +159,7 @@
                         })
                     });
 
-                    // 3. Continuar con el inicio del stream
+                    // iniciar el stream con el nombre proporcionado
                     const response = await fetch("/start_stream", {
                         method: "POST",
                         headers: {
@@ -139,7 +167,7 @@
                         },
                         body: new URLSearchParams({
                             titulo: streamName,
-                            matricula: matriculaCarro // Agregamos la matrícula al stream
+                            matricula: matriculaCarro
                         })
                     });
 
@@ -150,9 +178,11 @@
                         return;
                     }
 
+                    // configurar el stream iniciado
                     streamId = data.stream_id;
                     document.getElementById("codigo-acceso").textContent = streamId;
 
+                    // actualizar la interfaz para mostrar el stream
                     video.src = `/deteccion_feed/${streamId}`;
                     streaming = true;
                     document.getElementById("streamButton").innerText = "DETENER STREAM";
@@ -161,11 +191,16 @@
                     timerElement.style.display = 'block';
                     startTimer();
                     enableControlButtons(true);
+
+                    // iniciar la lectura de distancia
+                    if (!intervaloDistancia) {
+                        intervaloDistancia = setInterval(getDistancia, 100);
+                    }
                 } catch (err) {
                     console.error("Error en el proceso:", err);
                     alert("Error: " + err.message);
 
-                    // Intenta revertir el estado del carro si falló algo después de marcarlo como en uso
+                    // revertir el estado del carro si hay error
                     try {
                         await fetch(`/carros/actualizar-estado`, {
                             method: "POST",
@@ -181,15 +216,11 @@
                         console.error("Error al revertir estado:", revertErr);
                     }
                 }
-
-                // Iniciar a leer la distacia 
-                if (!intervaloDistancia) {
-                    intervaloDistancia = setInterval(getDistancia, 100);
-                }
             } else {
-                //Detenemos el modo manual si está activado
+                // detener el modo manual si está activo
                 detener();
-                // Detener stream en backend si tenemos ID
+                
+                // detener el stream en el backend
                 if (streamId) {
                     try {
                         await fetch(`/stop_stream/${streamId}`, {
@@ -201,7 +232,7 @@
                     streamId = null;
                 }
 
-                // Desactivar detección de objetos si está activa
+                // desactivar la detección si está activa
                 if (detecting) {
                     try {
                         await fetch("/deteccion/toggle", {
@@ -214,7 +245,7 @@
                     }
                 }
 
-                // Marcar carro como en desuso
+                // marcar el carro como disponible
                 await fetch(`/carros/actualizar-estado`, {
                     method: "POST",
                     headers: {
@@ -226,7 +257,7 @@
                     })
                 });
 
-
+                // resetear el estado de la interfaz
                 video.src = "";
                 streaming = false;
                 document.getElementById("streamButton").innerText = "INICIAR STREAM";
@@ -237,30 +268,33 @@
                 enableControlButtons(false);
                 stopCommand();
 
+                // detener la lectura de distancia
                 if (intervaloDistancia) {
                     clearInterval(intervaloDistancia);
-                    intervaloDistancia = null;  // Importante: resetear la variable
+                    intervaloDistancia = null;
                 }
             }
         }
 
+        // función para activar/desactivar la detección de objetos
         function toggleDetection() {
             detecting = !detecting;
             const button = document.getElementById("detectionButton");
             button.innerText = detecting ? "DETENER DETECCIÓN" : "IDENTIFICAR OBSTÁCULO";
 
+            // enviar comando al servidor para toggle de detección
             fetch("/deteccion/toggle", {
                 method: "POST"
             });
         }
 
+        // función para capturar una foto del stream actual
         function tomarFoto() {
-
             const datos = {
                 stream_id: streamId
             };
 
-            console.log("stream_id enviado:", window.stream_id);
+            // enviar solicitud para capturar foto
             fetch('/deteccion/capturar_foto', {
                 method: 'POST',
                 credentials: 'include',
@@ -272,10 +306,9 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('Foto guardada:', data);
-                    // Mostrar mensaje de éxito
+                    // mostrar mensaje de éxito temporal
                     const captureMessage = document.getElementById('captureMessage');
                     captureMessage.style.display = 'block';
-                    // Ocultar mensaje después de 2 segundos
                     setTimeout(() => {
                         captureMessage.style.display = 'none';
                     }, 2000);
@@ -284,6 +317,8 @@
                     console.error('Error al tomar la foto:', error);
                 });
         }
+
+        // funciones para el manejo del temporizador
         function startTimer() {
             seconds = 0;
             updateTimerDisplay();
@@ -297,13 +332,16 @@
         }
 
         function updateTimerDisplay() {
+            // calcular horas, minutos y segundos
             const hours = Math.floor(seconds / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
             const secs = seconds % 60;
+            // actualizar el display con formato HH:MM:SS
             timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             seconds++;
         }
 
+        // función para habilitar/deshabilitar los botones de control
         function enableControlButtons(enable) {
             const buttons = document.querySelectorAll('.control-button');
             buttons.forEach(button => {
@@ -311,12 +349,14 @@
             });
         }
 
+        // funciones para el manejo de comandos del carro
         function startCommand(command) {
             if (!streaming) return;
 
             stopCommand();
             sendCommand(command);
             currentCommand = command;
+            // enviar comando repetidamente mientras se mantiene presionado
             commandInterval = setInterval(() => {
                 sendCommand(command);
             }, COMMAND_DELAY);
@@ -332,6 +372,7 @@
             }
         }
 
+        // función para enviar comandos al servidor
         async function sendCommand(direction) {
             try {
                 const response = await fetch(`/manejo/command/${direction}`, {
@@ -353,6 +394,7 @@
             }
         }
 
+        // función para obtener la distancia actual del sensor
         async function getDistancia() {
             try {
                 const res = await fetch("/distancia_actual");
@@ -365,10 +407,12 @@
             }
         }
 
+        // función para iniciar el modo automático del carro
         async function iniciarManual() {
             detenerManual = false;
             console.log("Modo manual iniciado...");
 
+            // intervalo para el control automático
             avanzarInterval = setInterval(async () => {
                 if (detenerManual) {
                     clearInterval(avanzarInterval);
@@ -378,29 +422,35 @@
                 const distancia = await getDistancia();
                 if (distancia === null) return;
 
+                // lógica de evasión de obstáculos
                 if (distancia <= 20) {
                     console.log("Obstáculo detectado a " + distancia + " cm");
 
+                    // girar aleatoriamente a la izquierda o derecha
                     const giro = Math.random() < 0.5 ? "a" : "d";
-                    await sendCommand(giro); // Girar
-                    await sendCommand(giro); // Girar
-                    await sendCommand(giro); // Girar
-                    await sendCommand(giro); // Girar
-                    await sendCommand(giro); // Girar
-                    await new Promise(r => setTimeout(r, 1000)); // Esperar medio segundo
+                    // realizar giro completo
+                    await sendCommand(giro);
+                    await sendCommand(giro);
+                    await sendCommand(giro);
+                    await sendCommand(giro);
+                    await sendCommand(giro);
+                    // esperar antes de continuar
+                    await new Promise(r => setTimeout(r, 1000));
                 }
+                // avanzar continuamente
                 await sendCommand("w");
 
-            }, 500); // Envía comando cada 500ms
+            }, 500); // actualizar cada 500ms
         }
 
-        // (Opcional) Función para detener el proceso manual
+        // función para detener el modo automático
         function detener() {
             detenerManual = true;
             clearInterval(avanzarInterval);
             console.log("Modo manual detenido.");
         }
 
+        // función para detener el stream antes de navegar a otra página
         function detenerStreamAntesDeNavegar(event) {
             if (streaming) {
                 event.preventDefault();

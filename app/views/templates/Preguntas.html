@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Configuración básica del documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperación de Cuenta - LUSAM Self-Driving</title>
-    <!-- importamos el css -->
+    <!-- Importación de estilos CSS -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/preguntas.css') }}">
 </head>
 <body>
+    <!-- Barra de navegación -->
     <nav>
         <div class="nav-links">
             <a href="stream.html">← Volver al Control</a>
         </div>
     </nav>
 
+    <!-- Contenedor principal del formulario de recuperación -->
     <div class="recovery-container">
         <h1 class="recovery-title">RECUPERACIÓN DE CUENTA</h1>
 
+        <!-- Mensajes de advertencia -->
         <div class="warning" id="stepWarning" style="display: none;">
             Por favor, selecciona una pregunta y proporciona una respuesta
         </div>
@@ -25,11 +29,13 @@
             Usuario no definido en la URL
         </div>
 
+        <!-- Indicador de pasos del proceso -->
         <div class="step-indicator">
             <div class="step active" id="step1">1</div>
             <div class="step" id="step2">2</div>
         </div>
 
+        <!-- Contenedor del primer paso -->
         <div id="step1-container" class="step-container">
             <h2>Pregunta 1</h2>
             <select class="question-select" id="question1">
@@ -44,6 +50,7 @@
             <input type="text" class="answer-input" id="answer1" placeholder="Tu respuesta">
         </div>
 
+        <!-- Contenedor del segundo paso -->
         <div id="step2-container" class="step-container" style="display: none;">
             <h2>Pregunta 2</h2>
             <select class="question-select" id="question2">
@@ -56,8 +63,10 @@
     </div>
 
     <script>
+        // Variable para controlar el paso actual del formulario
         let currentStep = 1;
 
+        // Array con todas las preguntas disponibles
         const allQuestions = [
             { value: "", text: "Selecciona una pregunta" },
             { value: "mascotas", text: "¿Cuántas mascotas hay en tu casa?" },
@@ -68,6 +77,8 @@
             { value: "cantante", text: "¿Cuál es tu cantante favorito?" }
         ];
 
+        // Función para poblar las opciones de la segunda pregunta
+        // excluyendo la pregunta ya seleccionada en el primer paso
         function populateQuestion2Options(excludeValue) {
             const question2 = document.getElementById('question2');
             question2.innerHTML = '';
@@ -82,81 +93,86 @@
             });
         }
 
-      
-      function nextStep() {
-    if (currentStep === 1) {
-        const question1 = document.getElementById('question1').value;
-        const answer1 = document.getElementById('answer1').value;
-        const warningElement = document.getElementById('stepWarning');
+        // Función principal que maneja la navegación entre pasos
+        function nextStep() {
+            // Lógica para el primer paso
+            if (currentStep === 1) {
+                const question1 = document.getElementById('question1').value;
+                const answer1 = document.getElementById('answer1').value;
+                const warningElement = document.getElementById('stepWarning');
 
-        if (!question1 || !answer1) {
-            warningElement.style.display = 'block';
-            return;
-        }
+                // Validación de campos requeridos
+                if (!question1 || !answer1) {
+                    warningElement.style.display = 'block';
+                    return;
+                }
 
-        warningElement.style.display = 'none';
-        // Mostrar la siguiente sección
-        document.getElementById('step1-container').style.display = 'none';
-        document.getElementById('step2-container').style.display = 'block';
-        document.getElementById('step1').classList.add('completed');
-        document.getElementById('step2').classList.add('active');
-        document.querySelector('.submit-button').textContent = 'GUARDAR PREGUNTAS';
+                // Ocultar advertencia y mostrar siguiente paso
+                warningElement.style.display = 'none';
+                document.getElementById('step1-container').style.display = 'none';
+                document.getElementById('step2-container').style.display = 'block';
+                document.getElementById('step1').classList.add('completed');
+                document.getElementById('step2').classList.add('active');
+                document.querySelector('.submit-button').textContent = 'GUARDAR PREGUNTAS';
 
-        // Llenar dinámicamente el segundo <select> sin la opción seleccionada en el primero
-        populateQuestion2Options(question1);
+                // Actualizar opciones de la segunda pregunta
+                populateQuestion2Options(question1);
 
-        currentStep = 2;
-    } else {
-        const question1 = document.getElementById('question1').value;
-        const answer1 = document.getElementById('answer1').value;
-        const question2 = document.getElementById('question2').value;
-        const answer2 = document.getElementById('answer2').value;
-        const warningElement = document.getElementById('stepWarning');
-        const userWarningElement = document.getElementById('userWarning');
-
-        if (!question2 || !answer2) {
-            warningElement.style.display = 'block';
-            return;
-        }
-
-        // Obtener el usuario desde la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const usuario = urlParams.get("usuario");
-
-        if (!usuario) {
-            userWarningElement.style.display = 'block';
-            return;
-        }
-
-        warningElement.style.display = 'none';
-        userWarningElement.style.display = 'none';
-
-        const formData = new FormData();
-        formData.append("pregunta1", question1);
-        formData.append("respuesta1", answer1);
-        formData.append("pregunta2", question2);
-        formData.append("respuesta2", answer2);
-        formData.append("usuario", usuario);
-
-        fetch('/guardar-preguntas-seguridad', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (response.redirected) {
-                window.location.href = response.url;
+                currentStep = 2;
             } else {
-                alert('Error al guardar las preguntas de seguridad');
+                // Lógica para el segundo paso
+                const question1 = document.getElementById('question1').value;
+                const answer1 = document.getElementById('answer1').value;
+                const question2 = document.getElementById('question2').value;
+                const answer2 = document.getElementById('answer2').value;
+                const warningElement = document.getElementById('stepWarning');
+                const userWarningElement = document.getElementById('userWarning');
+
+                // Validación de campos requeridos
+                if (!question2 || !answer2) {
+                    warningElement.style.display = 'block';
+                    return;
+                }
+
+                // Obtener y validar usuario desde la URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const usuario = urlParams.get("usuario");
+
+                if (!usuario) {
+                    userWarningElement.style.display = 'block';
+                    return;
+                }
+
+                // Ocultar advertencias
+                warningElement.style.display = 'none';
+                userWarningElement.style.display = 'none';
+
+                // Preparar datos para enviar al servidor
+                const formData = new FormData();
+                formData.append("pregunta1", question1);
+                formData.append("respuesta1", answer1);
+                formData.append("pregunta2", question2);
+                formData.append("respuesta2", answer2);
+                formData.append("usuario", usuario);
+
+                // Enviar datos al servidor
+                fetch('/guardar-preguntas-seguridad', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else {
+                        alert('Error al guardar las preguntas de seguridad');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud:', error);
+                    alert('Error de red al guardar las preguntas de seguridad');
+                });
             }
-        })
-        .catch(error => {
-            console.error('Error en la solicitud:', error);
-            alert('Error de red al guardar las preguntas de seguridad');
-        });
-    }
-}
-
-
+        }
     </script>
 </body>
 </html>

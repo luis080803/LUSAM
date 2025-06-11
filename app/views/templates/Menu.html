@@ -2,31 +2,39 @@
 <html lang="es">
 
 <head>
+    <!-- Configuración básica del documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUSAM Self-Driving - Menú Principal</title>
-    <!-- importamos el css -->
+    <!-- Importación de estilos CSS -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/menu.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
+    <!-- Barra de navegación superior -->
     <nav>
+        <!-- Sección de perfil de usuario -->
         <div class="user-profile">
             <span>Bienvenido: {{ usuario.capitalize() }}</span>
         </div>
+        <!-- Enlaces de navegación -->
         <div class="nav-links">
             <a href="/acerca">Acerca de</a>
         </div>
     </nav>
 
+    <!-- Contenido principal de la página -->
     <div class="main-content">
+        <!-- Sección de bienvenida -->
         <div class="welcome-section">
             <h1>LUSAM Self-Driving</h1>
             <p>Bienvenido al sistema de control de vehículos autónomos</p>
         </div>
 
+        <!-- Grid de opciones del menú -->
         <div class="menu-grid">
+            <!-- Opción 1: Control en Vivo -->
             <div class="menu-item">
                 <i class="fas fa-video"></i>
                 <h2>Control en Vivo</h2>
@@ -36,6 +44,7 @@
                 </button>
             </div>
 
+            <!-- Opción 2: Visualizar Stream -->
             <div class="menu-item">
                 <i class="fas fa-eye"></i>
                 <h2>Visualizar un Stream</h2>
@@ -45,6 +54,7 @@
                 </button>
             </div>
 
+            <!-- Opción 3: Galería de Capturas -->
             <div class="menu-item">
                 <i class="fas fa-images"></i>
                 <h2>Galería de Capturas</h2>
@@ -54,6 +64,7 @@
                 </button>
             </div>
 
+            <!-- Opción 4: Estadísticas -->
             <div class="menu-item">
                 <i class="fas fa-chart-line"></i>
                 <h2>Estadísticas</h2>
@@ -63,6 +74,7 @@
                 </button>
             </div>
 
+            <!-- Opción 5: Configuración -->
             <div class="menu-item">
                 <i class="fas fa-cog"></i>
                 <h2>Configuración</h2>
@@ -72,6 +84,7 @@
                 </button>
             </div>
 
+            <!-- Opción 6: Cerrar Sesión -->
             <div class="menu-item">
                 <i class="fas fa-sign-out-alt"></i>
                 <h2>Cerrar Sesión</h2>
@@ -79,7 +92,6 @@
                 <a href="/salir" class="menu-button logout-button">Cerrar Sesión</a>
             </div>
         </div>
-    </div>
     </div>
 </body>
 

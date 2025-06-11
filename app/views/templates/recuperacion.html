@@ -2,38 +2,46 @@
 <html lang="es">
 
 <head>
+    <!-- configuración básica -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Cuenta - LUSAM Self-Driving</title>
-     <!-- importamos el css -->
+    <!-- importamos el css -->
     <link rel="stylesheet" href="{{ url_for('static', path='css/recuperacion.css') }}">
 </head>
 
 <body>
+    <!-- navegación -->
     <nav>
         <div class="nav-links">
             <a href="/login"> Volver</a>
         </div>
     </nav>
 
+    <!-- contenedor principal -->
     <div class="recovery-container">
         <h1 class="recovery-title">RECUPERAR CUENTA</h1>
 
+        <!-- mensaje de advertencia -->
         <div class="warning" id="userWarning" style="display: none;">
             Por favor, ingresa tu nombre de usuario para verificar tus preguntas de seguridad
         </div>
 
+        <!-- ingreso de usuario -->
         <div class="user-container">
             <h2>Usuario</h2>
             <input type="text" class="user-input" id="username" placeholder="Ingresa tu nombre de usuario">
             <button class="verify-button" onclick="verifyUser()">VERIFICAR USUARIO</button>
         </div>
 
+        <!-- sección de preguntas -->
         <div id="questions-section" style="display: none;">
+            <!-- mensaje informativo -->
             <div class="warning">
                 Por favor, responde las siguientes preguntas de seguridad para recuperar tu cuenta
             </div>
 
+            <!-- pregunta 1 -->
             <div class="question-container">
                 <h2>Pregunta 1</h2>
                 <div class="question-text" id="question1">
@@ -42,6 +50,7 @@
                 <input type="text" class="answer-input" id="answer1" placeholder="Tu respuesta">
             </div>
 
+            <!-- pregunta 2 -->
             <div class="question-container">
                 <h2>Pregunta 2</h2>
                 <div class="question-text" id="question2">
@@ -50,10 +59,12 @@
                 <input type="text" class="answer-input" id="answer2" placeholder="Tu respuesta">
             </div>
 
+            <!-- mensaje de éxito -->
             <div class="success-message" id="successMessage">
                 ¡Respuestas correctas! Redirigiendo a la página de cambio de contraseña...
             </div>
 
+            <!-- mensaje de error -->
             <div class="warning" id="answersWarning" style="display: none;">
                 Por favor, responde las preguntas de seguridad
             </div>
@@ -61,11 +72,14 @@
             <button class="submit-button" onclick="verifyAnswers()">VERIFICAR RESPUESTAS</button>
         </div>
     </div>
+
     <script>
+        // verifica el usuario y obtiene sus preguntas
         async function verifyUser() {
             const username = document.getElementById('username').value;
             const warningElement = document.getElementById('userWarning');
 
+            // verifica que el usuario haya ingresado su nombre
             if (!username) {
                 warningElement.textContent = 'Por favor, ingresa un nombre de usuario';
                 warningElement.style.display = 'block';
@@ -73,16 +87,20 @@
             }
 
             try {
+                // obtiene las preguntas del usuario
                 const response = await fetch(`/preguntas/${username}`);
                 const data = await response.json();
 
                 if (data.success) {
+                    // muestra las preguntas si el usuario existe
                     warningElement.style.display = 'none';
                     document.getElementById('questions-section').style.display = 'block';
 
+                    // actualiza el texto de las preguntas
                     document.getElementById('question1').textContent = data.preguntas[0];
                     document.getElementById('question2').textContent = data.preguntas[1];
                 } else {
+                    // muestra error si el usuario no existe
                     warningElement.textContent = data.message || 'Usuario no encontrado';
                     warningElement.style.display = 'block';
                 }
@@ -93,12 +111,14 @@
             }
         }
 
+        // verifica las respuestas del usuario
         async function verifyAnswers() {
             const username = document.getElementById('username').value;
             const answer1 = document.getElementById('answer1').value;
             const answer2 = document.getElementById('answer2').value;
             const warningElement = document.getElementById('answersWarning');
 
+            // verifica que haya respondido ambas preguntas
             if (!answer1 || !answer2) {
                 warningElement.textContent = 'Por favor, responde ambas preguntas';
                 warningElement.style.display = 'block';
@@ -106,6 +126,7 @@
             }
 
             try {
+                // envía las respuestas al servidor
                 const response = await fetch('/verificar_respuestas', {
                     method: 'POST',
                     headers: {
@@ -120,12 +141,14 @@
                 const data = await response.json();
 
                 if (data.success) {
+                    // redirige si las respuestas son correctas
                     warningElement.style.display = 'none';
                     document.getElementById('successMessage').style.display = 'block';
                     setTimeout(() => {
                         window.location.href = `/cambiocontrasena?usuario=${encodeURIComponent(username)}`;
                     }, 2000);
                 } else {
+                    // muestra error si las respuestas son incorrectas
                     warningElement.textContent = data.message || 'Respuestas incorrectas';
                     warningElement.style.display = 'block';
                 }
@@ -134,8 +157,6 @@
                 warningElement.textContent = 'Ocurrió un error al verificar las respuestas';
                 warningElement.style.display = 'block';
             }
- 
-
         }
     </script>
 </body>
