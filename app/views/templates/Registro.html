@@ -33,13 +33,19 @@
                 <div class="form-row">
                     <div class="half">
                         <label for="nombre">NOMBRE</label>
-                        <input type="text" id="nombre" name="nombre" required
+                        <input type="text" id="nombre" name="nombre" required pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras y espacios"
                             value="{{ form_data.nombre if form_data else '' }}">
+                        <div id="nombre-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
+                            El nombre solo puede contener letras y espacios.
+                        </div>
                     </div>
                     <div class="half">
                         <label for="apellido_paterno">APELLIDO PATERNO</label>
-                        <input type="text" id="apellido_paterno" name="apellido_paterno" required
+                        <input type="text" id="apellido_paterno" name="apellido_paterno" required pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras y espacios"
                             value="{{ form_data.apellido_paterno if form_data else '' }}">
+                        <div id="apellido-paterno-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
+                            El apellido solo puede contener letras y espacios.
+                        </div>
                     </div>
                 </div>
 
@@ -47,8 +53,11 @@
                 <div class="form-row">
                     <div class="half">
                         <label for="apellido_materno">APELLIDO MATERNO</label>
-                        <input type="text" id="apellido_materno" name="apellido_materno"
+                        <input type="text" id="apellido_materno" name="apellido_materno" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras y espacios"
                             value="{{ form_data.apellido_materno if form_data else '' }}">
+                        <div id="apellido-materno-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
+                            El apellido solo puede contener letras y espacios.
+                        </div>
                     </div>
                     <div class="half">
                         <label for="fecha_nacimiento" style="font-size: 0.75em;">FECHA DE NACIMIENTO</label>
@@ -59,8 +68,11 @@
 
                 <!-- campo de correo electrónico -->
                 <label for="correo">CORREO ELECTRÓNICO</label>
-                <input type="email" id="correo" name="correo" required
+                <input type="email" id="correo" name="correo" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingresa un correo electrónico válido"
                     value="{{ form_data.correo if form_data else '' }}">
+                <div id="correo-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
+                    Ingresa un correo electrónico válido (ejemplo: usuario@dominio.com)
+                </div>
                 {% if correo_existente %}
                 <div style="color:#ff5252; font-size:0.85em; margin-bottom:8px;">
                     Este correo ya está registrado.
@@ -71,8 +83,11 @@
                 <div class="form-row">
                     <div class="half">
                         <label for="usuario">USUARIO</label>
-                        <input type="text" id="usuario" name="usuario" required
+                        <input type="text" id="usuario" name="usuario" required pattern="[A-Za-z0-9]+" title="Solo letras y números"
                             value="{{ form_data.usuario if form_data else '' }}">
+                        <div id="usuario-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
+                            El usuario solo puede contener letras y números.
+                        </div>
                         {% if usuario_existente %}
                         <div style="color:#ff5252; font-size:0.85em; margin-bottom:8px;">
                             Usuario ya existente.
@@ -81,19 +96,17 @@
                     </div>
                     <div class="half">
                         <label for="password">CONTRASEÑA</label>
-                        <input type="password" id="password" name="password" required minlength="8"
+                        <input type="password" id="password" name="password" required minlength="8" pattern="[A-Za-z0-9]+" title="Solo letras y números"
                             oninput="validatePassword()">
+                        <div id="password-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
+                            La contraseña debe tener al menos 8 caracteres.
+                        </div>
                     </div>
-                </div>
-
-                <!-- mensaje de advertencia para la contraseña -->
-                <div id="password-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
-                    La contraseña debe tener al menos 8 caracteres.
                 </div>
 
                 <!-- campo de confirmación de contraseña -->
                 <label for="confirmar_password">CONFIRMAR CONTRASEÑA</label>
-                <input type="password" id="confirmar_password" name="confirmar_password" required
+                <input type="password" id="confirmar_password" name="confirmar_password" required minlength="8" pattern="[A-Za-z0-9]+" title="Solo letras y números"
                     oninput="validatePassword()">
                 <div id="confirm-warning" style="color:#ff5252; font-size:0.85em; margin-bottom:8px; display:none;">
                     Las contraseñas no coinciden.
@@ -107,20 +120,66 @@
                         const passwordWarning = document.getElementById('password-warning');
                         const confirmWarning = document.getElementById('confirm-warning');
 
-                        // verifica la longitud mínima
-                        passwordWarning.style.display = (password.value.length > 0 && password.value.length < 8) ? 'block' : 'none';
+                        // verifica la longitud mínima y el patrón
+                        const isValidPassword = password.value.length >= 8 && /^[A-Za-z0-9]+$/.test(password.value);
+                        passwordWarning.style.display = (!isValidPassword) ? 'block' : 'none';
 
                         // verifica que coincidan
                         confirmWarning.style.display = (confirmPassword.value.length > 0 && password.value !== confirmPassword.value) ? 'block' : 'none';
 
                         // deshabilita el botón si no cumple los requisitos
                         document.querySelector('input[type="submit"]').disabled = (
-                            password.value.length < 8 || password.value !== confirmPassword.value
+                            !isValidPassword || password.value !== confirmPassword.value
                         );
                     }
 
-                    // ejecuta la validación al cargar la página
-                    document.addEventListener('DOMContentLoaded', validatePassword);
+                    // valida los campos de texto
+                    function validateTextInput(input, warningId) {
+                        const warning = document.getElementById(warningId);
+                        const isValid = /^[A-Za-záéíóúÁÉÍÓÚñÑ\s]+$/.test(input.value);
+                        warning.style.display = (!isValid && input.value.length > 0) ? 'block' : 'none';
+                        return isValid;
+                    }
+
+                    // valida el usuario
+                    function validateUsuario(input) {
+                        const warning = document.getElementById('usuario-warning');
+                        const isValid = /^[A-Za-z0-9]+$/.test(input.value);
+                        warning.style.display = (!isValid && input.value.length > 0) ? 'block' : 'none';
+                        return isValid;
+                    }
+
+                    // valida el correo electrónico
+                    function validateCorreo(input) {
+                        const warning = document.getElementById('correo-warning');
+                        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                        const isValid = emailRegex.test(input.value);
+                        warning.style.display = (!isValid && input.value.length > 0) ? 'block' : 'none';
+                        return isValid;
+                    }
+
+                    // agrega los event listeners para validación en tiempo real
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const nombre = document.getElementById('nombre');
+                        const apellidoPaterno = document.getElementById('apellido_paterno');
+                        const apellidoMaterno = document.getElementById('apellido_materno');
+                        const usuario = document.getElementById('usuario');
+                        const correo = document.getElementById('correo');
+
+                        nombre.addEventListener('input', () => validateTextInput(nombre, 'nombre-warning'));
+                        apellidoPaterno.addEventListener('input', () => validateTextInput(apellidoPaterno, 'apellido-paterno-warning'));
+                        apellidoMaterno.addEventListener('input', () => validateTextInput(apellidoMaterno, 'apellido-materno-warning'));
+                        usuario.addEventListener('input', () => validateUsuario(usuario));
+                        correo.addEventListener('input', () => validateCorreo(correo));
+
+                        // validación inicial
+                        validatePassword();
+                        validateTextInput(nombre, 'nombre-warning');
+                        validateTextInput(apellidoPaterno, 'apellido-paterno-warning');
+                        validateTextInput(apellidoMaterno, 'apellido-materno-warning');
+                        validateUsuario(usuario);
+                        validateCorreo(correo);
+                    });
                 </script>
 
                 <input type="submit" value="REGISTRARSE">

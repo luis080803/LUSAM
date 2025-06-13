@@ -34,7 +34,7 @@ async def start_stream(
     except Exception as e:
         # si hay algún error, lanzamos un http exception
         raise HTTPException(status_code=500, detail=str(e))
-    
+
 
 # método post para detener un stream existente
 # recibe el id del stream y actualiza su estado
@@ -45,9 +45,9 @@ async def stop_stream(stream_id: str):
         updated = await StreamRepository.actualizar_fin_stream(stream_id)
         if not updated:
             raise HTTPException(status_code=404, detail="Stream no encontrado")
-        
+
         return {"message": "Stream detenido correctamente"}
-    
+
     except Exception as e:
         # si hay algún error se lanza una excepción
         raise HTTPException(status_code=500, detail=f"Error al detener el stream: {str(e)}")

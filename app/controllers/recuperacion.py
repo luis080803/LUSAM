@@ -17,8 +17,8 @@ async def mostrar_recuperacion(request: Request):
     )
 
 # método get para mostrar la página de cambio de contraseña
-@router.get("/cambiocontrasena", response_class=HTMLResponse)
-async def mostrar_cambio_contrasena(request: Request, usuario: str):
+@router.post("/cambiocontrasena", response_class=HTMLResponse)
+async def mostrar_cambio_contrasena(request: Request, usuario: str = Form(...)):
     return templates.TemplateResponse("Cambiocontrasena.html", {"request": request, "usuario": usuario})
 
 # método post para procesar el cambio de contraseña

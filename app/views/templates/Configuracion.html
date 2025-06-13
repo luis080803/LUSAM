@@ -12,13 +12,41 @@
             const pass = document.getElementById("password").value;
             const confirm = document.getElementById("confirmar_password").value;
             const warning = document.getElementById("confirm-warning");
+            const passwordWarning = document.getElementById("password-warning");
 
-            if (pass !== confirm) {
-                warning.style.display = "block";
-                return false;
-            }
-            warning.style.display = "none";
-            return true;
+            // verifica la longitud mínima y el patrón
+            const isValidPassword = pass.length >= 8 && /^[A-Za-z0-9]+$/.test(pass);
+            passwordWarning.style.display = (!isValidPassword && pass.length > 0) ? 'block' : 'none';
+
+            // verifica que coincidan
+            warning.style.display = (confirm.length > 0 && pass !== confirm) ? 'block' : 'none';
+
+            return isValidPassword && pass === confirm;
+        }
+
+        // valida los campos de texto
+        function validateTextInput(input, warningId) {
+            const warning = document.getElementById(warningId);
+            const isValid = /^[A-Za-záéíóúÁÉÍÓÚñÑ\s]+$/.test(input.value);
+            warning.style.display = (!isValid && input.value.length > 0) ? 'block' : 'none';
+            return isValid;
+        }
+
+        // valida el usuario
+        function validateUsuario(input) {
+            const warning = document.getElementById('usuario-warning');
+            const isValid = /^[A-Za-z0-9]+$/.test(input.value);
+            warning.style.display = (!isValid && input.value.length > 0) ? 'block' : 'none';
+            return isValid;
+        }
+
+        // valida el correo electrónico
+        function validateCorreo(input) {
+            const warning = document.getElementById('correo-warning');
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const isValid = emailRegex.test(input.value);
+            warning.style.display = (!isValid && input.value.length > 0) ? 'block' : 'none';
+            return isValid;
         }
 
         // Función para formatear la fecha
@@ -35,6 +63,32 @@
             if (fechaNacimiento && fechaNacimiento.value) {
                 fechaNacimiento.value = formatDate(fechaNacimiento.value);
             }
+
+            // Obtener referencias a los campos
+            const nombre = document.querySelector('input[name="Nombre"]');
+            const apellidoPaterno = document.querySelector('input[name="ApellidoPaterno"]');
+            const apellidoMaterno = document.querySelector('input[name="ApellidoMaterno"]');
+            const usuario = document.querySelector('input[name="Usuario"]');
+            const correo = document.querySelector('input[name="Correo"]');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmar_password');
+
+            // Agregar event listeners para validación en tiempo real
+            nombre.addEventListener('input', () => validateTextInput(nombre, 'nombre-warning'));
+            apellidoPaterno.addEventListener('input', () => validateTextInput(apellidoPaterno, 'apellido-paterno-warning'));
+            apellidoMaterno.addEventListener('input', () => validateTextInput(apellidoMaterno, 'apellido-materno-warning'));
+            usuario.addEventListener('input', () => validateUsuario(usuario));
+            correo.addEventListener('input', () => validateCorreo(correo));
+            password.addEventListener('input', checkConfirm);
+            confirmPassword.addEventListener('input', checkConfirm);
+
+            // Validación inicial
+            validateTextInput(nombre, 'nombre-warning');
+            validateTextInput(apellidoPaterno, 'apellido-paterno-warning');
+            validateTextInput(apellidoMaterno, 'apellido-materno-warning');
+            validateUsuario(usuario);
+            validateCorreo(correo);
+            checkConfirm();
         });
     </script>
 </head>
@@ -49,25 +103,31 @@
             <div class="user-row">
                 <span class="user-label">Nombre:</span>
                 <input type="text" name="Nombre" value="{{ usuario_datos.Nombre if usuario_datos else usuario.Nombre }}"
-                    required>
+                    required pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras y espacios">
+                <div id="nombre-warning" class="warning" style="display: none;">El nombre solo puede contener letras y espacios.</div>
             </div>
 
             <div class="user-row">
                 <span class="user-label">Apellido Paterno:</span>
                 <input type="text" name="ApellidoPaterno"
-                    value="{{ usuario_datos.ApellidoPaterno if usuario_datos else usuario.ApellidoPaterno }}" required>
+                    value="{{ usuario_datos.ApellidoPaterno if usuario_datos else usuario.ApellidoPaterno }}" 
+                    required pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras y espacios">
+                <div id="apellido-paterno-warning" class="warning" style="display: none;">El apellido solo puede contener letras y espacios.</div>
             </div>
 
             <div class="user-row">
                 <span class="user-label">Apellido Materno:</span>
                 <input type="text" name="ApellidoMaterno"
-                    value="{{ usuario_datos.ApellidoMaterno if usuario_datos else usuario.ApellidoMaterno }}">
+                    value="{{ usuario_datos.ApellidoMaterno if usuario_datos else usuario.ApellidoMaterno }}"
+                    pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]+" title="Solo letras y espacios">
+                <div id="apellido-materno-warning" class="warning" style="display: none;">El apellido solo puede contener letras y espacios.</div>
             </div>
 
             <div class="user-row">
                 <span class="user-label">Correo:</span>
-                <input type="text" name="Correo" value="{{ usuario_datos.Correo if usuario_datos else usuario.Correo }}"
-                    required>
+                <input type="email" name="Correo" value="{{ usuario_datos.Correo if usuario_datos else usuario.Correo }}"
+                    required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingresa un correo electrónico válido">
+                <div id="correo-warning" class="warning" style="display: none;">Ingresa un correo electrónico válido (ejemplo: usuario@dominio.com)</div>
             </div>
 
             <div class="user-row">
@@ -80,23 +140,24 @@
             <div class="user-row">
                 <span class="user-label">Usuario:</span>
                 <input type="text" name="Usuario"
-                    value="{{ usuario_datos.Usuario if usuario_datos else usuario.Usuario }}" required>
+                    value="{{ usuario_datos.Usuario if usuario_datos else usuario.Usuario }}" 
+                    required pattern="[A-Za-z0-9]+" title="Solo letras y números">
+                <div id="usuario-warning" class="warning" style="display: none;">El usuario solo puede contener letras y números.</div>
                 {% if usuario_existente %}
-                <div style="color:#ff5252; font-size:0.85em; margin-top:4px;">
-                    El nombre de usuario ya existe. Elige otro.
-                </div>
+                <div class="warning" style="display: block;">El nombre de usuario ya existe. Elige otro.</div>
                 {% endif %}
             </div>
 
             <div class="pass-fields">
                 <div>
                     <label for="password">Nueva contraseña</label>
-                    <input type="password" id="password" name="password" minlength="8">
+                    <input type="password" id="password" name="password" minlength="8" pattern="[A-Za-z0-9]+" title="Solo letras y números">
+                    <div id="password-warning" class="warning" style="display: none;">La contraseña debe tener al menos 8 caracteres.</div>
                 </div>
                 <div>
                     <label for="confirmar_password">Confirmar nueva contraseña</label>
-                    <input type="password" id="confirmar_password" name="confirmar_password" minlength="8">
-                    <div id="confirm-warning" class="warning">Las contraseñas no coinciden.</div>
+                    <input type="password" id="confirmar_password" name="confirmar_password" minlength="8" pattern="[A-Za-z0-9]+" title="Solo letras y números">
+                    <div id="confirm-warning" class="warning" style="display: none;">Las contraseñas no coinciden.</div>
                 </div>
             </div>
 
@@ -109,6 +170,80 @@
             <button class="btn-menu" onclick="window.location.href='/menu';return false;">Regresar al Menú</button>
         </div>
     </div>
+
+    <style>
+        .warning {
+            color: #ff5252;
+            font-size: 0.85em;
+            margin-top: 4px;
+            padding: 4px 8px;
+            background: rgba(255, 82, 82, 0.1);
+            border-left: 3px solid #ff5252;
+            border-radius: 0 4px 4px 0;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+        }
+
+        .user-row {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .user-row input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #7b1fa2;
+            background: #22223a;
+            color: #e1bfff;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .user-row input:focus {
+            border-color: #00eaff;
+            box-shadow: 0 0 8px rgba(0, 234, 255, 0.3);
+        }
+
+        .user-row input:invalid {
+            border-color: #ff5252;
+        }
+
+        .pass-fields {
+            position: relative;
+        }
+
+        .pass-fields > div {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .pass-fields input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #7b1fa2;
+            background: #22223a;
+            color: #e1bfff;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .pass-fields input:focus {
+            border-color: #00eaff;
+            box-shadow: 0 0 8px rgba(0, 234, 255, 0.3);
+        }
+
+        .pass-fields input:invalid {
+            border-color: #ff5252;
+        }
+    </style>
+
+    <script>
+        // ... resto del código JavaScript sin cambios ...
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,9 @@
+<div class="form-group">
+    <label for="Usuario">Usuario:</label>
+    <input type="text" class="form-control" id="Usuario" name="Usuario" value="{{ usuario.Usuario }}" required>
+    {% if usuario_existente %}
+    <div class="alert alert-danger mt-2">
+        Este nombre de usuario ya está en uso. Por favor, elige otro.
+    </div>
+    {% endif %}
+</div> 

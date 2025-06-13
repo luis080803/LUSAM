@@ -1,13 +1,16 @@
 # importación de librerías necesarias para el procesamiento de imágenes (opencv, numpy, fastapi) 
 import cv2
 import numpy as np
-from fastapi import APIRouter,Request, Cookie
+from fastapi import APIRouter,Request, Cookie, HTTPException, Form
 from fastapi.responses import StreamingResponse, JSONResponse
 from datetime import datetime, date
 import os
 from app.models.imagenes import ImagenBase
 from app.repository.imagen_rep import ImagenRepository
 from pydantic import BaseModel
+from app.repository.stream import StreamRepository
+from motor.motor_asyncio import AsyncIOMotorClientSession
+from app.config.database import db
 
 # el router se encarga de manejar las rutas de la página 
 router = APIRouter()
@@ -115,7 +118,7 @@ async def stream_video(stream_id: str):
 
 # endpoint para tomar foto desde el último frame
 @router.post("/deteccion/capturar_foto")
-async def capturar_foto(request: CapturaRequest,   usuario: str = Cookie(None, alias="current_user")):
+async def capturar_foto(request: CapturaRequest, usuario: str = Cookie(None, alias="current_user")):
     global stream_id  # variable global stream_id
 
     if ultimo_frame is None: # si el último frame es nulo

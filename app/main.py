@@ -57,7 +57,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
             "/static",
             "/favicon.ico",
             "/preguntas",
-            "/guardar-preguntas-seguridad"
+            "/guardar-preguntas-seguridad",
+            "/cambiocontrasena",
+            "/verificar_respuestas"
         ]
 
         # si la ruta es pública, permite el acceso sin autenticación

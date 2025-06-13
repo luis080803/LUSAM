@@ -145,7 +145,18 @@
                     warningElement.style.display = 'none';
                     document.getElementById('successMessage').style.display = 'block';
                     setTimeout(() => {
-                        window.location.href = `/cambiocontrasena?usuario=${encodeURIComponent(username)}`;
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/cambiocontrasena';
+
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'usuario';
+                        input.value = username;
+
+                        form.appendChild(input);
+                        document.body.appendChild(form);
+                        form.submit();
                     }, 2000);
                 } else {
                     // muestra error si las respuestas son incorrectas
